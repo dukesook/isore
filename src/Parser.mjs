@@ -1,0 +1,55 @@
+import { MP4Box } from './mp4box.all.js';
+
+/**
+ * Parses HEIF file
+ */
+export const Parser = {
+  /**
+   * @param {ArrayBuffer} rawHeif
+   * @returns {TODO} - MP4Box file object
+   */
+  parseHeif(rawHeif) {
+    if (!(rawHeif instanceof ArrayBuffer)) {
+      console.error('praseHeif() expects an ArrayBuffer but got: ', typeof rawHeif);
+      return undefined;
+    }
+
+    rawHeif.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
+    const mp4boxfile = MP4Box.createFile();
+    mp4boxfile.appendBuffer(rawHeif); // MP4Box expects an ArrayBuffer
+    mp4boxfile.flush();
+
+    // Shortcut to metabox
+    mp4boxfile.meta = mp4boxfile.boxes.find((b) => b.type === 'meta');
+
+    return mp4boxfile;
+  },
+};
+
+/**
+ * Dynamically Load MP4Box
+ * Alternatively, you could staticlly load with HTML element: <script src="https://cdn.jsdelivr.net/npm/mp4box/dist/mp4box.all.js"></script>
+ * MP4Box does not have a module export, and we can't use the 'import' statement.
+ * The main benefits of dynamically loading MP4Box include:
+ *  1) Doesn't depend on the global scope
+ *  2) Allows for isolated Unit Testing
+ *  3) Better performance - only load when needed
+ * **/
+// async function loadMP4Box() {
+//   if (!window.MP4Box) {
+//     await new Promise((resolve, reject) => {
+//       const script = document.createElement('script');
+//       script.src = 'https://cdn.jsdelivr.net/npm/mp4box/dist/mp4box.all.js';
+//       script.onload = resolve;
+//       script.onerror = reject;
+//       document.head.appendChild(script);
+//     });
+//   }
+//   return window.MP4Box;
+// }
+
+// async function initMP4Box() {
+//   Parser.MP4Box = await loadMP4Box();
+// }
+
+// initMP4Box();

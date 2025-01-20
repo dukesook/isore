@@ -15,7 +15,6 @@ export const Gui = {
     itemsTable.innerHTML = '';
 
     let caption = document.createElement('caption');
-    caption.style.fontWeight = 'bold';
     caption.textContent = 'Items';
     itemsTable.appendChild(caption);
 
@@ -69,7 +68,6 @@ export const Gui = {
 
     // Add Title
     let caption = document.createElement('caption');
-    caption.style.fontWeight = 'bold';
     caption.textContent = 'Properties';
     propertiesTable.appendChild(caption);
 
@@ -108,7 +106,6 @@ export const Gui = {
     locationsTable.innerHTML = '';
 
     let caption = document.createElement('caption');
-    caption.style.fontWeight = 'bold';
     caption.textContent = 'Item Locations';
     locationsTable.appendChild(caption);
 
@@ -167,7 +164,6 @@ export const Gui = {
 
     // Add Title
     let caption = document.createElement('caption');
-    caption.style.fontWeight = 'bold';
     caption.textContent = 'Item References';
     referencesTable.appendChild(caption);
 

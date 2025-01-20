@@ -1,6 +1,6 @@
-import { Parser } from './Parser.mjs';
+import { Parser } from '/src/Parser.mjs';
+import { Gui } from '/src/IsoreGui.mjs';
 
-const itemsContainer = document.getElementById("items-container");
 
 // JavaScript to handle file loading
 const fileInput = document.getElementById('file-input');
@@ -40,23 +40,28 @@ function displayFile(arrayBuffer) {
   let mp4boxfile = Parser.parseHeif(arrayBuffer);
   let meta = mp4boxfile.meta;
 
-  let boxes = meta.boxes;
+  const items = meta.iinf.item_infos;
+  let itemsTable = document.getElementById('items-table');
+  Gui.displayItemsOnTable(items, itemsTable);
 
-  // Find box of type 'iinf'
-  let iinf = boxes.find(box => box.type === 'iinf');
-  let items = iinf.item_infos;
+  const properties = meta.iprp.ipco.boxes;
+  let propertiesTable = document.getElementById('properties-table');
+  Gui.displayPropertiesOnTable(properties, propertiesTable);
 
-  const ul = document.createElement("ul");
+  const locations = meta.iloc.items;
+  let locationsTable = document.getElementById('locations-table');
+  Gui.displayItemLocations(locations, locationsTable);
 
-    // Iterate through items and add each as an <li>
-    for (let item of items) {
-      const li = document.createElement("li"); // Create a new <li> element
-      //   console.log('name:', item.item_name);
-      //   console.log('uuid:', item.item_uuid);
-    li.textContent = item.item_ID + '. ' + item.item_type;
-    ul.appendChild(li);                      // Append the <li> to the <ul>
+  if (meta.iref) {
+    const references = meta.iref.references;
+    let referencesTable = document.getElementById('references-table');
+    Gui.displayReferencesOnTable(references, referencesTable);
   }
 
-  itemsContainer.appendChild(ul);            // Append the <ul> to the container
+  if (meta.grpl) {
+    const groupList = meta.grpl.boxes;
+    let groupListTable = document.getElementById('groupListTable');
+    Gui.displayGroupListOnTable(groupList, groupListTable);
+  }
 }
 

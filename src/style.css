@@ -11,6 +11,6 @@ tr {
   background-color: lightgrey;
 }
 
-table {
-  /* background-color: black; */
+th {
+  background-color: gray;
 }

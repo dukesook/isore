@@ -19,7 +19,6 @@ export const Gui = {
     itemsTable.appendChild(caption);
 
     let row = document.createElement('tr');
-    row.style.backgroundColor = 'grey';
 
     let header1 = document.createElement('th');
     header1.textContent = 'Item ID';
@@ -72,7 +71,6 @@ export const Gui = {
 
     // Add Headers
     let headerRow = document.createElement('tr');
-    headerRow.style.backgroundColor = 'grey';
     const headers = ['Index', 'Property Type'];
     headers.forEach((headerText) => {
       let header = document.createElement('th');
@@ -108,7 +106,6 @@ export const Gui = {
     locationsTable.appendChild(caption);
 
     let headerRow = document.createElement('tr');
-    headerRow.style.backgroundColor = 'grey';
 
     const headers = ['Item ID', 'CM', 'Base Offset', 'Extent Offset', 'Extent Length'];
     headers.forEach((headerText) => {
@@ -166,7 +163,6 @@ export const Gui = {
 
     // Add Headers
     let headerRow = document.createElement('tr');
-    headerRow.style.backgroundColor = 'grey';
     const headers = ['Item ID', 'Type', 'To IDs'];
     headers.forEach((headerText) => {
       let header = document.createElement('th');

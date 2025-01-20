@@ -37,7 +37,6 @@ export const Gui = {
 
     items.forEach((item) => {
       let row = itemsTable.insertRow();
-      row.setAttribute('bgcolor', 'lightgrey');
 
       let idCell = row.insertCell();
       idCell.textContent = item.item_ID;
@@ -85,7 +84,6 @@ export const Gui = {
     // Add Properties
     properties.forEach((property, index) => {
       let row = propertiesTable.insertRow();
-      row.setAttribute('bgcolor', 'lightgrey');
 
       let indexCell = row.insertCell();
       indexCell.textContent = index + 1;
@@ -123,7 +121,6 @@ export const Gui = {
 
     locations.forEach((location) => {
       let row = locationsTable.insertRow();
-      row.setAttribute('bgcolor', 'lightgrey');
 
       let idCell = row.insertCell();
       idCell.textContent = location.item_ID;
@@ -181,7 +178,6 @@ export const Gui = {
     // Add References
     references.forEach((reference) => {
       let row = referencesTable.insertRow();
-      row.setAttribute('bgcolor', 'lightgrey');
 
       let idCell = row.insertCell();
       idCell.textContent = reference.from_item_ID;

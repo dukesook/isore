@@ -1,4 +1,4 @@
-import { Parser } from '/src/Parser.mjs';
+import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
 
 // File Variables
@@ -37,10 +37,8 @@ function fail(x) {
 }
 
 function loadFile(arrayBuffer) {
-  let mp4boxfile = Parser.parseIsoFile(arrayBuffer); // MP4BoxFile
-  isofile = mp4boxfile
-  console.log('typeof mp4boxfile', typeof mp4boxfile)
-  console.log('mp4boxfile', mp4boxfile)
+  // isofile = Parser.parseIsoFile(arrayBuffer);
+  isofile = new IsoFile(arrayBuffer);
   let meta = isofile.meta;
 
   const items = meta.iinf.item_infos;
@@ -74,19 +72,10 @@ function getItemById(id) {
   const locations = meta.iloc.items;
   const mdat = isofile.mdats[0];
   console.log('mdat', mdat)
-  
-  console.log(mdat); // Outputs the full object to the console
-  console.log(Object.keys(mdat)); // Lists the keys (properties) of the object
-  console.log(Object.getPrototypeOf(mdat)); // Displays the object's prototype
-
-
-
 }
 
 function onClickedItem(item) {
   console.log('clicked item', item);
   const id = item.item_ID;
   console.log(id)
-  let data = getItemById(id);
-  // console.log('item data', data)
 }

@@ -4,7 +4,7 @@ import { RawImage } from './RawImage.mjs';
 import { ImagePyramid } from './ImagePyramid.mjs';
 
 /**
- * This class holds pertent information about a heif file
+ * This class holds pertent information about an ISO file
  *
  * @property meta Example:
  * meta = {
@@ -28,9 +28,9 @@ import { ImagePyramid } from './ImagePyramid.mjs';
  * @property {ImagePyramid} imagePyramid - See ImagePyramid.mjs
  */
 export class IsoFile {
-  raw = null; // ArrayBuffer of the unparsed HEIF file.
-  parsedHeif = null; // HEIF file parsed into boxes.
-  meta = null; // Shortcut to the metabox in parsedHeif.
+  raw = null; // ArrayBuffer of the unparsed ISO file.
+  parsedIsoFile = null; // ISO file parsed into boxes.
+  meta = null; // Shortcut to the metabox in parsedIsoFile.
   items = null; // Shortcut to the metabox items. uncC items will have a RawImage object.
   imagePyramid = null;
 
@@ -40,11 +40,11 @@ export class IsoFile {
    */
   constructor(rawIn) {
     if (!(rawIn instanceof ArrayBuffer)) {
-      throw new Error('HeifFile expects an ArrayBuffer but received ' + typeof rawIn + ' instead.');
+      throw new Error('IsoFile expects an ArrayBuffer but received ' + typeof rawIn + ' instead.');
     }
     this.raw = rawIn;
-    this.parsedHeif = Parser.parseHeif(rawIn);
-    this.meta = this.parsedHeif.meta; // Shortcut to metabox
+    this.parsedIsoFile = Parser.parseIsoFile(rawIn);
+    this.meta = this.parsedIsoFile.meta; // Shortcut to metabox
     this.items = this.meta.iinf.item_infos; // Shortcut to items
     setItems(this);
   }
@@ -79,15 +79,15 @@ export class IsoFile {
 
   storeImage(tileId, rawImage) {
     if (!rawImage instanceof RawImage) {
-      throw Error('HeifFile.storeTile() expects a RawImage object but received ' + typeof rawImage + ' instead.');
+      throw Error('IsoFile.storeTile() expects a RawImage object but received ' + typeof rawImage + ' instead.');
     }
     const tile = this.getItem(tileId);
     tile.rawImage = rawImage;
   }
 
   getItemReferences(id) {
-    const heifFile = this;
-    const meta = heifFile.meta;
+    const isoFile = this;
+    const meta = isoFile.meta;
     const allReferences = meta.iref.references; // Array of references
     const itemReferences = allReferences.filter((ref) => ref.from_item_ID == id);
     return itemReferences;
@@ -103,8 +103,8 @@ export class IsoFile {
   }
 
   getGridData(gridId) {
-    const heifFile = this;
-    const rawData = getItemDataIloc(heifFile, gridId);
+    const isoFile = this;
+    const rawData = getItemDataIloc(isoFile, gridId);
     const gridData = ImageGrid.parseGridData(rawData);
     return gridData;
   }
@@ -116,8 +116,8 @@ export class IsoFile {
    * @returns 2D array of tile Ids (Number)
    */
   getTileIdMap(gridId) {
-    const heifFile = this;
-    const references = heifFile.getItemReferences(gridId);
+    const isoFile = this;
+    const references = isoFile.getItemReferences(gridId);
 
     //Find the reference with the type 'dimg'
     const dimgReferences = references.filter((ref) => ref.type == 'dimg');
@@ -127,7 +127,7 @@ export class IsoFile {
     const dimg = dimgReferences[0];
     const tileIds_1dArray = dimg.references;
 
-    const data = getItemDataIloc(heifFile, gridId);
+    const data = getItemDataIloc(isoFile, gridId);
     const gridData = ImageGrid.parseGridData(data);
     let { rows, columns } = gridData;
 
@@ -170,9 +170,9 @@ export class IsoFile {
   }
 
   getTileRowAndColumn(tileId) {
-    const heifFile = this;
-    const gridId = heifFile.getGridIdForTile(tileId);
-    const gridItem = heifFile.getItem(gridId);
+    const isoFile = this;
+    const gridId = isoFile.getGridIdForTile(tileId);
+    const gridItem = isoFile.getItem(gridId);
     const { rows, columns } = gridItem.imageGrid;
     for (let row = 0; row < rows; row++) {
       for (let column = 0; column < columns; column++) {
@@ -194,9 +194,9 @@ export class IsoFile {
    * @returns {Array} - List of tile Ids that lie within the radius
    */
   getTilesInRadius(ptx, pty, radius, gridId) {
-    const heifFile = this;
-    const gridData = heifFile.getGridData(gridId);
-    const tileIdMap = heifFile.getTileIdMap(gridId);
+    const isoFile = this;
+    const gridData = isoFile.getGridData(gridId);
+    const tileIdMap = isoFile.getTileIdMap(gridId);
 
     const { rows, columns, tileWidth, tileHeight } = gridData;
     let tileIds = [];
@@ -226,9 +226,9 @@ export class IsoFile {
    * Gets the next item identifer from current tilenumber in the vertical and horizontal direction
    */
   static getNextId(verticalInc, horizontalInc, currentId, tileIdMap) {
-    throw Error('TODO: Fix Bug'); // Static functions should not use CogDemo.currentGridId or CogDemo.heifFile
-    const heifFile = CogDemo.heifFile;
-    const { row, column } = heifFile.getTileRowAndColumn(heifFile, currentId);
+    throw Error('TODO: Fix Bug'); // Static functions should not use CogDemo.currentGridId or CogDemo.isoFile
+    const isoFile = CogDemo.isoFile;
+    const { row, column } = isoFile.getTileRowAndColumn(isoFile, currentId);
     row += verticalInc;
     column += horizontalInc;
     try {
@@ -260,15 +260,15 @@ export class IsoFile {
  * Each grid item has 2 objects:
  *   1) imageGrid: Contains metadata about the grid
  *   2) tileIds: 2D array of tile Ids
- * @param {HeifFile} heifFile
+ * @param {IsoFile} isoFile
  */
-function setItems(heifFile) {
-  const items = heifFile.items;
+function setItems(isoFile) {
+  const items = isoFile.items;
 
   items.forEach((item) => {
     const type = item.item_type;
     const id = item.item_ID;
-    const raw = getItemDataIloc(heifFile, id);
+    const raw = getItemDataIloc(isoFile, id);
     if (!raw) {
       return;
     } else if (type === 'grid') {
@@ -276,12 +276,14 @@ function setItems(heifFile) {
       item.imageGrid = new ImageGrid(raw);
 
       // Save Tile Ids
-      let tileIdMap = heifFile.getTileIdMap(id);
+      let tileIdMap = isoFile.getTileIdMap(id);
       item.tileIds = tileIdMap;
     } else if (type === 'unci') {
       const width = 512; // TODO: Don't hard code. Read ispe box.
       const height = 512; // TODO: Don't hard code. Read ispe box.
       item.rawImage = new RawImage(new Uint8Array(raw), width, height);
+    } else if (type === 'hvc1') {
+      // TODO: Implement
     } else if (type === 'mime') {
       // TODO: Implement
     } else if (type === 'uri ') {
@@ -297,14 +299,14 @@ function setItems(heifFile) {
 
 /**
  *  Use the iloc (Items Location Box) to retrieve the item data. Usually in mdat or idat.
- * @param {HeifFile} heifFile
+ * @param {IsoFile} isoFile
  * @param {Number} id
  * @returns {ArrayBuffer} - The raw data for the item.
  *                          Returns null if the item is not found or the data is out of bounds.
  */
-function getItemDataIloc(heifFile, id) {
-  const meta = heifFile.meta;
-  const rawFile = heifFile.raw;
+function getItemDataIloc(isoFile, id) {
+  const meta = isoFile.meta;
+  const rawFile = isoFile.raw;
 
   // Find Item
   const itemLocation = meta.iloc.items.find((item) => item.item_ID == id);

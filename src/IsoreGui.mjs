@@ -19,24 +19,15 @@ export const Gui = {
     itemsTable.appendChild(caption);
 
     let row = document.createElement('tr');
-
-    let header1 = document.createElement('th');
-    header1.textContent = 'Item ID';
-    row.appendChild(header1);
-
-    let header2 = document.createElement('th');
-    header2.textContent = 'Item Type';
-    row.appendChild(header2);
-
-    let header3 = document.createElement('th');
-    header3.textContent = 'Item Name';
-    row.appendChild(header3);
-
-    let header4 = document.createElement('th');
-    header4.textContent = "Content Type";
-    row.appendChild(header4);
-
     itemsTable.appendChild(row);
+
+    // Add Headers
+    const headers = ['Item ID', 'Item Type', 'Item Name', 'Content Type'];
+    headers.forEach((headerText) => {
+      let header = document.createElement('th');
+      header.textContent = headerText;
+      row.appendChild(header);
+    });
 
     items.forEach((item) => {
       let row = itemsTable.insertRow();

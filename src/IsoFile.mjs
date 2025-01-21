@@ -227,23 +227,6 @@ export class IsoFile {
   }
 
   /**
-   * Gets the next item identifer from current tilenumber in the vertical and horizontal direction
-   */
-  static getNextId(verticalInc, horizontalInc, currentId, tileIdMap) {
-    throw Error('TODO: Fix Bug'); // Static functions should not use CogDemo.currentGridId or CogDemo.isoFile
-    const isoFile = CogDemo.isoFile;
-    const { row, column } = isoFile.getTileRowAndColumn(isoFile, currentId);
-    row += verticalInc;
-    column += horizontalInc;
-    try {
-      let newId = tileIdMap[row][column];
-      return newId;
-    } catch (error) {
-      return null; //At the limit of the grid of tiles
-    }
-  }
-
-  /**
    * @param {RawImage} tile - Contains pixel data
    */
   static displayTile(tile, row, col, canvas) {

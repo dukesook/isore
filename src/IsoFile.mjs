@@ -77,6 +77,10 @@ export class IsoFile {
     return this.items.find((item) => item.item_ID == id);
   }
 
+  getItemData(id) {
+    return getItemDataIloc(this, id);
+  }
+
   storeImage(tileId, rawImage) {
     if (!rawImage instanceof RawImage) {
       throw Error('IsoFile.storeTile() expects a RawImage object but received ' + typeof rawImage + ' instead.');

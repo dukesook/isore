@@ -2,7 +2,7 @@ import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
 
 // File Variables
-let isofile = null
+let g_isofile = null
 
 const fileInput = document.getElementById('file-input');
 fileInput.addEventListener('change', (event) => {
@@ -38,8 +38,8 @@ function fail(x) {
 
 function loadFile(arrayBuffer) {
   // isofile = Parser.parseIsoFile(arrayBuffer);
-  isofile = new IsoFile(arrayBuffer);
-  let meta = isofile.meta;
+  g_isofile = new IsoFile(arrayBuffer);
+  let meta = g_isofile.meta;
 
   const items = meta.iinf.item_infos;
   let itemsTable = document.getElementById('items-table');
@@ -66,16 +66,11 @@ function loadFile(arrayBuffer) {
   }
 }
 
-function getItemById(id) {
-  console.log(isofile)
-  const meta = isofile.meta;
-  const locations = meta.iloc.items;
-  const mdat = isofile.mdats[0];
-  console.log('mdat', mdat)
-}
 
 function onClickedItem(item) {
   console.log('clicked item', item);
   const id = item.item_ID;
   console.log(id)
+  item = g_isofile.getItemData(id);
+  console.log('item: ', item);
 }

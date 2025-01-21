@@ -1,14 +1,14 @@
 import { Parser } from '/src/Parser.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
 
+// File Variables
+let isofile = null
 
-// JavaScript to handle file loading
 const fileInput = document.getElementById('file-input');
-
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
   if (file) {
-    loadLocalFile(file, displayFile, fail);
+    loadLocalFile(file, loadFile, fail);
   }
 });
 
@@ -36,13 +36,16 @@ function fail(x) {
   console.log(x)
 }
 
-function displayFile(arrayBuffer) {
-  let mp4boxfile = Parser.parseHeif(arrayBuffer);
-  let meta = mp4boxfile.meta;
+function loadFile(arrayBuffer) {
+  let mp4boxfile = Parser.parseIsoFile(arrayBuffer); // MP4BoxFile
+  isofile = mp4boxfile
+  console.log('typeof mp4boxfile', typeof mp4boxfile)
+  console.log('mp4boxfile', mp4boxfile)
+  let meta = isofile.meta;
 
   const items = meta.iinf.item_infos;
   let itemsTable = document.getElementById('items-table');
-  Gui.displayItemsOnTable(items, itemsTable);
+  Gui.displayItemsOnTable(items, itemsTable, onClickedItem);
 
   const properties = meta.iprp.ipco.boxes;
   let propertiesTable = document.getElementById('properties-table');
@@ -65,3 +68,18 @@ function displayFile(arrayBuffer) {
   }
 }
 
+function getItemById(id) {
+  console.log(isofile)
+  const meta = isofile.meta;
+  const locations = meta.iloc.items;
+
+
+}
+
+function onClickedItem(item) {
+  console.log('clicked item', item);
+  const id = item.item_ID;
+  console.log(id)
+  data = getItemById(id);
+  console.log('item data', data)
+}

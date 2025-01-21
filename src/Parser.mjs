@@ -5,18 +5,18 @@ import { MP4Box } from './mp4box.all.js';
  */
 export const Parser = {
   /**
-   * @param {ArrayBuffer} rawHeif
+   * @param {ArrayBuffer} rawFile
    * @returns {TODO} - MP4Box file object
    */
-  parseHeif(rawHeif) {
-    if (!(rawHeif instanceof ArrayBuffer)) {
-      console.error('praseHeif() expects an ArrayBuffer but got: ', typeof rawHeif);
+  parseIsoFile(rawFile) {
+    if (!(rawFile instanceof ArrayBuffer)) {
+      console.error('praseIsoFile() expects an ArrayBuffer but got: ', typeof rawFile);
       return undefined;
     }
 
-    rawHeif.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
+    rawFile.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
     const mp4boxfile = MP4Box.createFile();
-    mp4boxfile.appendBuffer(rawHeif); // MP4Box expects an ArrayBuffer
+    mp4boxfile.appendBuffer(rawFile); // MP4Box expects an ArrayBuffer
     mp4boxfile.flush();
 
     // Shortcut to metabox

@@ -32,6 +32,10 @@ export const Gui = {
     header3.textContent = 'Item Name';
     row.appendChild(header3);
 
+    let header4 = document.createElement('th');
+    header4.textContent = "Content Type";
+    row.appendChild(header4);
+
     itemsTable.appendChild(row);
 
     items.forEach((item) => {
@@ -45,6 +49,9 @@ export const Gui = {
 
       let nameCell = row.insertCell();
       nameCell.textContent = item.item_name;
+
+      let contentCell = row.insertCell();
+      contentCell.textContent = item.content_type;
 
       if (eventListener) {
         row.addEventListener('click', () => {

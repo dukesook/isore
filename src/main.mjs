@@ -72,6 +72,13 @@ function getItemById(id) {
   console.log(isofile)
   const meta = isofile.meta;
   const locations = meta.iloc.items;
+  const mdat = isofile.mdats[0];
+  console.log('mdat', mdat)
+  
+  console.log(mdat); // Outputs the full object to the console
+  console.log(Object.keys(mdat)); // Lists the keys (properties) of the object
+  console.log(Object.getPrototypeOf(mdat)); // Displays the object's prototype
+
 
 
 }
@@ -80,6 +87,6 @@ function onClickedItem(item) {
   console.log('clicked item', item);
   const id = item.item_ID;
   console.log(id)
-  data = getItemById(id);
-  console.log('item data', data)
+  let data = getItemById(id);
+  // console.log('item data', data)
 }

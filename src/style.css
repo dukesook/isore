@@ -6,6 +6,10 @@ caption {
   font-weight: bold;
 }
 
+table {
+  background-color: black;
+}
+
 tr {
   /* background-color: gray; */
   background-color: lightgrey;

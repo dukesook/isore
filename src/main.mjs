@@ -105,6 +105,11 @@ function displayXML(raw) {
   document.getElementById('main-content').textContent = prettyXML;
 }
 
+/**
+ * 
+ * @param {*} buffer 
+ * @returns {String}
+ */
 function arrayBufferToHex(buffer) {
   const bytes = new Uint8Array(buffer);
   return Array.from(bytes)
@@ -115,6 +120,8 @@ function arrayBufferToHex(buffer) {
 function displayUnknownItem(item_type, raw) {
   let message = 'Unknown item type: ' + item_type;
   const hexData = arrayBufferToHex(raw);
-  message += '\n\nHexadecimal Data:\n' + hexData;
+  if (hexData.length < 1000) {
+    message += '\n\nHexadecimal Data:\n' + hexData;
+  }
   document.getElementById('main-content').textContent = message;
 }

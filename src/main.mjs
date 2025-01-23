@@ -1,5 +1,6 @@
 import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
+import vkbeautify from 'vkbeautify'; // npm install vkbeautify
 
 // File Variables
 let g_isofile = null
@@ -71,6 +72,49 @@ function onClickedItem(item) {
   console.log('clicked item', item);
   const id = item.item_ID;
   console.log(id)
-  item = g_isofile.getItemData(id);
-  console.log('item: ', item);
+  const raw = g_isofile.getItemData(id);
+  console.log('item: ', raw);
+  decodeItem(item, raw);
+}
+
+
+function decodeItem(item, raw) {
+  const item_type = item.item_type;
+  if (item_type == 'mime') {
+    console.log('mime item');
+    displayXML(raw);
+  } else {
+    displayUnknownItem(item_type, raw);
+  }
+
+}
+
+
+function displayXML(raw) {
+  const rawString = new TextDecoder().decode(raw);
+  
+  // Parse the XML string into a DOM object
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(rawString, "application/xml");
+
+  // Serialize the DOM object into a pretty-printed XML string
+  const serializer = new XMLSerializer();
+  const prettyXML = vkbeautify.xml(serializer.serializeToString(xmlDoc)); // Use a library for beautification
+  
+  // Display XML
+  document.getElementById('main-content').textContent = prettyXML;
+}
+
+function arrayBufferToHex(buffer) {
+  const bytes = new Uint8Array(buffer);
+  return Array.from(bytes)
+    .map(byte => byte.toString(16).padStart(2, '0')) // Convert each byte to hex
+    .join(' '); // Join bytes with spaces
+}
+
+function displayUnknownItem(item_type, raw) {
+  let message = 'Unknown item type: ' + item_type;
+  const hexData = arrayBufferToHex(raw);
+  message += '\n\nHexadecimal Data:\n' + hexData;
+  document.getElementById('main-content').textContent = message;
 }

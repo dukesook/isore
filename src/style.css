@@ -18,3 +18,12 @@ tr {
 th {
   background-color: gray;
 }
+
+.main-container {
+  display:flex
+}
+
+#main-content {
+  border: 2px solid black;
+  white-space: pre-wrap; /* Preserve Whitespace */
+}

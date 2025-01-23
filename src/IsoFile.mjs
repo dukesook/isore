@@ -275,6 +275,8 @@ function setItems(isoFile) {
       // TODO: Implement
     } else if (type === 'uri ') {
       // TODO: Implement
+    } else if (type === 'Exif') {
+      // TODO: Implement
     } else {
       throw Error('Unknown item type: ' + type);
     }

@@ -9,6 +9,16 @@
   cursor: pointer; /* Make clickable */
 }
 
+.tree li::before {
+  /* Make the content a bullet point */
+  content: '\25B6'; /* ▶ Right arrow */
+  content: '\2022'; /* • Bullet point */
+
+  /* Make the content a circle */
+  content: '\25CF'; /* ● Black circle */
+  margin-right: 0.5rem;
+}
+
 .tree .toggle::before {
   content: '\25B6'; /* ▶ Right arrow for collapsed */
   display: inline-block;

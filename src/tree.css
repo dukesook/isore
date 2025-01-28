@@ -1,3 +1,9 @@
+.tree {
+  border: 1px solid #000;
+  font-size: 20px;
+  background-color: lightgreen
+}
+
 .tree ul {
   list-style-type: none; /* Remove default bullets */
   padding-left: 1rem;   /* Indent children */

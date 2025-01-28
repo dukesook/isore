@@ -75,6 +75,7 @@ function loadFile(arrayBuffer) {
  */
 function displayBoxTree(isoFile) {
   const div = document.querySelector('#box-tree');
+  div.innerHTML = '';
   const root_container = document.createElement('ul');
   div.appendChild(root_container);
   const root_box = isoFile.parsedIsoFile;

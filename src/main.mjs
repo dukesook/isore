@@ -86,25 +86,18 @@ function displayBoxTree(isoFile) {
 }
 
 
-function addBoxToTree(box, container, indent = '') {
+function addBoxToTree(box, container) {
   const fourcc = box.type
 
-  if (box.boxes == null) {
-    const li = document.createElement('li');
-    li.textContent = indent + fourcc; // box.type == 4cc
-    container.appendChild(li);
-  }
-
-
+  const li = document.createElement('li');
+  li.textContent = fourcc; // box.type == 4cc
+  container.appendChild(li);
 
   // Add Children
-  else if (box.boxes) {
-    let span = document.createElement('span');
-    span.textContent = fourcc;
-    span.classList.add('toggle');
+  if (box.boxes) {
+    li.classList.add('toggle');
     const childContainer = document.createElement('ul');
     childContainer.classList.add('hidden');
-    container.appendChild(span);
     container.appendChild(childContainer);
     box.boxes.forEach((childBox) => {
       addBoxToTree(childBox, childContainer);

@@ -4,6 +4,14 @@
   background-color: lightgreen
 }
 
+.tree li:hover {
+  background-color: lightblue;
+}
+
+.tree span:hover {
+  background-color: lightblue;
+}
+
 .tree ul {
   list-style-type: none; /* Remove default bullets */
   padding-left: 1rem;   /* Indent children */

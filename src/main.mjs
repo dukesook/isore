@@ -46,7 +46,7 @@ function loadFile(arrayBuffer) {
 
   const items = meta.iinf.item_infos;
   let itemsTable = document.getElementById('items-table');
-  Gui.displayItemsOnTable(items, itemsTable, onClickedItem);
+  Gui.displayItemsOnTable(items, itemsTable, displayItem);
 
   const properties = meta.iprp.ipco.boxes;
   let propertiesTable = document.getElementById('properties-table');
@@ -97,6 +97,9 @@ function addBoxToTree(box, container) {
   const li = document.createElement('li');
   li.textContent = fourcc; // box.type == 4cc
   container.appendChild(li);
+  li.addEventListener('click', (event) => {
+    displayBox(box);
+  });
 
   // Add Children
   if (children) {
@@ -111,7 +114,18 @@ function addBoxToTree(box, container) {
 }
 
 
-function onClickedItem(item) {
+function displayBox(box) {
+  console.log(box);
+  const fourcc = box.type;
+  if (fourcc == 'infe') {
+    displayItem(box);
+  } else {
+    document.getElementById('main-content').textContent = "Unknown box type: " + fourcc;
+  }
+}
+
+
+function displayItem(item) {
   console.log('clicked item', item);
   const id = item.item_ID;
   console.log(id)

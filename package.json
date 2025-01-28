@@ -8,6 +8,6 @@
     "vite": "^6.0.7"
   },
   "dependencies": {
-    "vkbeautify": "^0.99.3"
+    "xml-formatter": "^3.6.4"
   }
 }

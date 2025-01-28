@@ -1,6 +1,7 @@
 import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
-import vkbeautify from 'vkbeautify'; // npm install vkbeautify
+import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
+
 
 // File Variables
 let g_isofile = null
@@ -92,18 +93,10 @@ function decodeItem(item, raw) {
 
 function displayXML(raw) {
   const rawString = new TextDecoder().decode(raw);
-  
-  // Parse the XML string into a DOM object
-  const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(rawString, "application/xml");
-
-  // Serialize the DOM object into a pretty-printed XML string
-  const serializer = new XMLSerializer();
-  const prettyXML = vkbeautify.xml(serializer.serializeToString(xmlDoc)); // Use a library for beautification
-  
-  // Display XML
+  const prettyXML = xmlFormatter(rawString);
   document.getElementById('main-content').textContent = prettyXML;
 }
+
 
 /**
  * 

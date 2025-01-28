@@ -41,6 +41,7 @@ function fail(x) {
 function loadFile(arrayBuffer) {
   // isofile = Parser.parseIsoFile(arrayBuffer);
   g_isofile = new IsoFile(arrayBuffer);
+  displayBoxTree(g_isofile);
   let meta = g_isofile.meta;
 
   const items = meta.iinf.item_infos;
@@ -65,6 +66,35 @@ function loadFile(arrayBuffer) {
     const groupList = meta.grpl.boxes;
     let groupListTable = document.getElementById('groupListTable');
     Gui.displayGroupListOnTable(groupList, groupListTable);
+  }
+}
+
+/**
+ * 
+ * @param {IsoFile} isoFile 
+ */
+function displayBoxTree(isoFile) {
+  const div = document.querySelector('#box-tree');
+  const root_container = document.createElement('ul');
+  div.appendChild(root_container);
+  const root_box = isoFile.parsedIsoFile;
+  displayBox(root_box, root_container);
+}
+
+
+function displayBox(box, container, indent = '') {
+  const fourcc = box.type
+  const li = document.createElement('li');
+  li.textContent = indent + fourcc; // box.type == 4cc
+  container.appendChild(li);
+
+  // Add Children
+  if (box.boxes) {
+    const childContainer = document.createElement('ul');
+    box.boxes.forEach((childBox) => {
+      li.appendChild(childContainer);
+      displayBox(childBox, childContainer);
+    });
   }
 }
 

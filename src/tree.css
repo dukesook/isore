@@ -1,0 +1,25 @@
+.tree ul {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 1rem;   /* Indent children */
+}
+
+.tree li {
+  margin: 0.5rem 0;
+  position: relative;
+  cursor: pointer; /* Make clickable */
+}
+
+.tree .toggle::before {
+  content: '\25B6'; /* ▶ Right arrow for collapsed */
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.tree .toggle.expanded::before {
+  transform: rotate(90deg); /* Down arrow for expanded */
+}
+
+.tree ul.hidden {
+  display: none; /* Hide child nodes */
+}

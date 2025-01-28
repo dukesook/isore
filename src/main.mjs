@@ -78,22 +78,35 @@ function displayBoxTree(isoFile) {
   const root_container = document.createElement('ul');
   div.appendChild(root_container);
   const root_box = isoFile.parsedIsoFile;
-  displayBox(root_box, root_container);
+  root_box.boxes.forEach((box) => {
+    addBoxToTree(box, root_container);
+  })
+  setTreeListeners();
 }
 
 
-function displayBox(box, container, indent = '') {
+function addBoxToTree(box, container, indent = '') {
   const fourcc = box.type
-  const li = document.createElement('li');
-  li.textContent = indent + fourcc; // box.type == 4cc
-  container.appendChild(li);
+
+  if (box.boxes == null) {
+    const li = document.createElement('li');
+    li.textContent = indent + fourcc; // box.type == 4cc
+    container.appendChild(li);
+  }
+
+
 
   // Add Children
-  if (box.boxes) {
+  else if (box.boxes) {
+    let span = document.createElement('span');
+    span.textContent = fourcc;
+    span.classList.add('toggle');
     const childContainer = document.createElement('ul');
+    childContainer.classList.add('hidden');
+    container.appendChild(span);
+    container.appendChild(childContainer);
     box.boxes.forEach((childBox) => {
-      li.appendChild(childContainer);
-      displayBox(childBox, childContainer);
+      addBoxToTree(childBox, childContainer);
     });
   }
 }
@@ -147,4 +160,47 @@ function displayUnknownItem(item_type, raw) {
     message += '\n\nHexadecimal Data:\n' + hexData;
   }
   document.getElementById('main-content').textContent = message;
+}
+
+
+
+function setTreeListeners() {
+  // Add event listeners to all toggle elements
+  document.querySelectorAll('.tree .toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const childUl = toggle.nextElementSibling; // Find the sibling <ul>
+      if (childUl) {
+        childUl.classList.toggle('hidden'); // Show/hide child nodes
+        toggle.classList.toggle('expanded'); // Toggle the arrow direction
+      }
+    });
+  });
+
+
+  // <div class="tree">
+  //   <ul>
+  //     <li>
+  //       <span class="toggle">Parent 1</span>
+  //       <ul class="hidden">
+  //         <li>Child 1.1</li>
+  //         <li>Child 1.2</li>
+  //         <li>
+  //           <span class="toggle">Child 1.3</span>
+  //           <ul class="hidden">
+  //             <li>Grandchild 1.3.1</li>
+  //             <li>Grandchild 1.3.2</li>
+  //           </ul>
+  //         </li>
+  //       </ul>
+  //     </li>
+
+  //     <li>
+  //       <span class="toggle">Parent 2</span>
+  //       <ul class="hidden">
+  //         <li>Child 2.1</li>
+  //         <li>Child 2.2</li>
+  //       </ul>
+  //     </li>
+  //   </ul>
+  // </div>
 }

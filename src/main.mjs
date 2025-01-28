@@ -88,18 +88,23 @@ function displayBoxTree(isoFile) {
 
 function addBoxToTree(box, container) {
   const fourcc = box.type
+  let children = box.boxes;
+
+  if (fourcc == 'iinf') {
+    children = box.item_infos;
+  }
 
   const li = document.createElement('li');
   li.textContent = fourcc; // box.type == 4cc
   container.appendChild(li);
 
   // Add Children
-  if (box.boxes) {
+  if (children) {
     li.classList.add('toggle');
     const childContainer = document.createElement('ul');
     childContainer.classList.add('hidden');
     container.appendChild(childContainer);
-    box.boxes.forEach((childBox) => {
+    children.forEach((childBox) => {
       addBoxToTree(childBox, childContainer);
     });
   }

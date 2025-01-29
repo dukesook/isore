@@ -182,5 +182,140 @@ export const Gui = {
       let toIdsCell = row.insertCell();
       toIdsCell.textContent = reference.references.map((toId) => toId.to_item_ID).join(', ');
     });
-  }
+  },
+
+  displayBox(box) {
+    console.log(box);
+    console.log(typeof box);
+    const boxMetadata = document.getElementById('box-metadata');
+    
+    // Clear Previous Content
+    boxMetadata.innerHTML = '';
+
+    // Create Table
+    const table = document.createElement('table');
+    boxMetadata.appendChild(table);
+
+    Object.entries(box).forEach(([key, value]) => {
+      console.log(`${key}: ${box[key]}`);
+      const row = document.createElement('tr');
+      const keyCell = document.createElement('td');
+      keyCell.textContent = key;
+      const valueCell = document.createElement('td');
+      valueCell.textContent = value;
+      row.appendChild(keyCell);
+      row.appendChild(valueCell);
+      table.appendChild(row);
+    });
+
+    return;
+    const fourcc = box.type;
+    if (fourcc == 'infe') {
+      displayItem(box);
+    } else {
+      document.getElementById('main-content').textContent = "Unknown box type: " + fourcc;
+    }
+  },
+
+  displayItem(item) {
+    console.log('clicked item', item);
+    const id = item.item_ID;
+    console.log(id)
+    // const raw = isofile.getItemData(id);
+    // console.log('item: ', raw);
+    // decodeItem(item, raw);
+  },
+
+  decodeItem(item, raw) {
+    // TODO: decodeItem doesn't belong in Gui
+    const item_type = item.item_type;
+    if (item_type == 'mime') {
+      console.log('mime item');
+      displayXML(raw);
+    } else {
+      displayUnknownItem(item_type, raw);
+    }
+  },
+
+  displayXML(raw) {
+    const rawString = new TextDecoder().decode(raw);
+    const prettyXML = xmlFormatter(rawString);
+    document.getElementById('main-content').textContent = prettyXML;
+  },
+
+  /**
+   * @param {*} buffer 
+   * @returns {String}
+   */
+  arrayBufferToHex(buffer) {
+    const bytes = new Uint8Array(buffer);
+    return Array.from(bytes)
+      .map(byte => byte.toString(16).padStart(2, '0')) // Convert each byte to hex
+      .join(' '); // Join bytes with spaces
+  },
+
+  displayUnknownItem(item_type, raw) {
+    let message = 'Unknown item type: ' + item_type;
+    const hexData = arrayBufferToHex(raw);
+    if (hexData.length < 1000) {
+      message += '\n\nHexadecimal Data:\n' + hexData;
+    }
+    document.getElementById('main-content').textContent = message;
+  },
+
+  addBoxToTree(box, container) {
+    const fourcc = box.type
+    let children = box.boxes;
+  
+    if (fourcc == 'iinf') {
+      children = box.item_infos;
+    }
+  
+    const li = document.createElement('li');
+    li.textContent = fourcc; // box.type == 4cc
+    container.appendChild(li);
+    li.addEventListener('click', (event) => {
+      Gui.displayBox(box);
+    });
+  
+    // Add Children
+    if (children) {
+      li.classList.add('toggle');
+      const childContainer = document.createElement('ul');
+      childContainer.classList.add('hidden');
+      container.appendChild(childContainer);
+      children.forEach((childBox) => {
+        Gui.addBoxToTree(childBox, childContainer);
+      });
+    }
+  },
+
+  setTreeListeners() {
+    // Add event listeners to all toggle elements
+    document.querySelectorAll('.tree .toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const childUl = toggle.nextElementSibling; // Find the sibling <ul>
+        if (childUl) {
+          childUl.classList.toggle('hidden'); // Show/hide child nodes
+          toggle.classList.toggle('expanded'); // Toggle the arrow direction
+        }
+      });
+    });
+  },
+
+  /**
+   * @param {IsoFile} isoFile 
+   */
+  displayBoxTree(isoFile) {
+    const div = document.querySelector('#box-tree');
+    div.innerHTML = '';
+    const root_container = document.createElement('ul');
+    div.appendChild(root_container);
+    const root_box = isoFile.parsedIsoFile;
+    root_box.boxes.forEach((box) => {
+      Gui.addBoxToTree(box, root_container);
+    })
+    Gui.setTreeListeners();
+  },
+
 }

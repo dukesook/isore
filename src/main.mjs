@@ -40,7 +40,5 @@ function loadFile(arrayBuffer) {
   // isofile = Parser.parseIsoFile(arrayBuffer);
   g_isofile = new IsoFile(arrayBuffer);
   Gui.displayBoxTree(g_isofile);
-  let meta = g_isofile.meta;
-
 
 }

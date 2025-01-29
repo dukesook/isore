@@ -44,9 +44,11 @@ export class IsoFile {
     }
     this.raw = rawIn;
     this.parsedIsoFile = Parser.parseIsoFile(rawIn);
-    this.meta = this.parsedIsoFile.meta; // Shortcut to metabox
-    this.items = this.meta.iinf.item_infos; // Shortcut to items
-    setItems(this);
+    
+    // Avoid this because there may be multiple meta boxes
+    // this.meta = this.parsedIsoFile.meta; // Shortcut to metabox
+    // this.items = this.meta.iinf.item_infos; // Shortcut to items
+    // setItems(this);
   }
 
   /**

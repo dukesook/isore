@@ -275,10 +275,6 @@ export const Gui = {
     tree.appendChild(li);
 
     // Add Event Listener to li
-    // ??????
-    // li.addEventListener(listener(box, boxOutput));
-    
-
     li.addEventListener('click', () => listener(box, boxOutput));
   
     // Add Children

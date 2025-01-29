@@ -262,7 +262,7 @@ export const Gui = {
     document.getElementById('main-content').textContent = message;
   },
 
-  addBoxToTree(box, container) {
+  addBoxToTree(box, tree) {
     const boxMetadata = document.getElementById('box-metadata');
 
     const fourcc = box.type
@@ -274,7 +274,7 @@ export const Gui = {
   
     const li = document.createElement('li');
     li.textContent = fourcc; // box.type == 4cc
-    container.appendChild(li);
+    tree.appendChild(li);
     li.addEventListener('click', (event) => {
       Gui.displayBox(box, boxMetadata);
     });
@@ -284,7 +284,7 @@ export const Gui = {
       li.classList.add('toggle');
       const childContainer = document.createElement('ul');
       childContainer.classList.add('hidden');
-      container.appendChild(childContainer);
+      tree.appendChild(childContainer);
       children.forEach((childBox) => {
         Gui.addBoxToTree(childBox, childContainer);
       });

@@ -184,17 +184,16 @@ export const Gui = {
     });
   },
 
-  displayBox(box) {
+  displayBox(box, container) {
     console.log(box);
     console.log(typeof box);
-    const boxMetadata = document.getElementById('box-metadata');
     
     // Clear Previous Content
-    boxMetadata.innerHTML = '';
+    container.innerHTML = '';
 
     // Create Table
     const table = document.createElement('table');
-    boxMetadata.appendChild(table);
+    container.appendChild(table);
 
     Object.entries(box).forEach(([key, value]) => {
       console.log(`${key}: ${box[key]}`);
@@ -264,6 +263,8 @@ export const Gui = {
   },
 
   addBoxToTree(box, container) {
+    const boxMetadata = document.getElementById('box-metadata');
+
     const fourcc = box.type
     let children = box.boxes;
   
@@ -275,7 +276,7 @@ export const Gui = {
     li.textContent = fourcc; // box.type == 4cc
     container.appendChild(li);
     li.addEventListener('click', (event) => {
-      Gui.displayBox(box);
+      Gui.displayBox(box, boxMetadata);
     });
   
     // Add Children

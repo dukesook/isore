@@ -116,6 +116,32 @@ function addBoxToTree(box, container) {
 
 function displayBox(box) {
   console.log(box);
+  console.log(typeof box);
+  const boxMetadata = document.getElementById('box-metadata');
+  
+  // Clear Previous Content
+  boxMetadata.innerHTML = '';
+
+  // Create Table
+  const table = document.createElement('table');
+  boxMetadata.appendChild(table);
+
+  // Add Rows
+  
+
+  Object.entries(box).forEach(([key, value]) => {
+    console.log(`${key}: ${box[key]}`);
+    const row = document.createElement('tr');
+    const keyCell = document.createElement('td');
+    keyCell.textContent = key;
+    const valueCell = document.createElement('td');
+    valueCell.textContent = value;
+    row.appendChild(keyCell);
+    row.appendChild(valueCell);
+    table.appendChild(row);
+  });
+
+  return;
   const fourcc = box.type;
   if (fourcc == 'infe') {
     displayItem(box);

@@ -10,7 +10,7 @@ const fileInput = document.getElementById('file-input');
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
   if (file) {
-    loadLocalFile(file, loadFile, fail);
+    loadLocalFile(file, loadFile, console.log);
   }
 });
 
@@ -33,10 +33,6 @@ function loadLocalFile(file, successCallback, errCallback) {
   reader.readAsArrayBuffer(file);
 }
 
-function fail(x) {
-  console.log('fail')
-  console.log(x)
-}
 
 function loadFile(arrayBuffer) {
   // isofile = Parser.parseIsoFile(arrayBuffer);

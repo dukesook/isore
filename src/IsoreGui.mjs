@@ -206,14 +206,6 @@ export const Gui = {
       row.appendChild(valueCell);
       table.appendChild(row);
     });
-
-    return;
-    const fourcc = box.type;
-    if (fourcc == 'infe') {
-      displayItem(box);
-    } else {
-      document.getElementById('main-content').textContent = "Unknown box type: " + fourcc;
-    }
   },
 
   displayItem(item) {
@@ -306,16 +298,22 @@ export const Gui = {
 
   /**
    * @param {IsoFile} isoFile 
+   * @param {HTMLElement} tree
    */
-  displayBoxTree(isoFile) {
-    const div = document.querySelector('#box-tree');
-    div.innerHTML = '';
-    const root_container = document.createElement('ul');
-    div.appendChild(root_container);
-    const root_box = isoFile.parsedIsoFile;
-    root_box.boxes.forEach((box) => {
-      Gui.addBoxToTree(box, root_container);
+  displayBoxTree(isoFile, tree) {
+    // Clear Previous Content
+    tree.innerHTML = '';
+    
+    // ?????
+    const root = document.createElement('ul');
+    tree.appendChild(root);
+
+    // Add File-Level Boxes
+    isoFile.parsedIsoFile.boxes.forEach((box) => {
+      Gui.addBoxToTree(box, root);
     })
+
+    // Listeners
     Gui.setTreeListeners();
   },
 

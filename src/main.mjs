@@ -37,8 +37,11 @@ function loadLocalFile(file, successCallback, errCallback) {
 
 
 function loadFile(arrayBuffer) {
-  // isofile = Parser.parseIsoFile(arrayBuffer);
+  // Create IsoFile object
   g_isofile = new IsoFile(arrayBuffer);
-  Gui.displayBoxTree(g_isofile);
+
+  // Display Box Tree
+  const tree = document.getElementById('box-tree');
+  Gui.displayBoxTree(g_isofile, tree);
 
 }

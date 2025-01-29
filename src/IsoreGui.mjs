@@ -254,7 +254,14 @@ export const Gui = {
     document.getElementById('main-content').textContent = message;
   },
 
-  addBoxToTree(box, tree, listener) {
+
+  /**
+   * 
+   * @param {*} box 
+   * @param {*} tree 
+   * @param {function(box; *, output: *)} listener 
+   */
+  addBoxToTree(box, tree, boxOutput, listener) {
 
     const fourcc = box.type
     let children = box.boxes;
@@ -267,7 +274,12 @@ export const Gui = {
     li.textContent = fourcc; // box.type == 4cc
     tree.appendChild(li);
 
-    li.addEventListener('click', listener);
+    // Add Event Listener to li
+    // ??????
+    // li.addEventListener(listener(box, boxOutput));
+    
+
+    li.addEventListener('click', () => listener(box, boxOutput));
   
     // Add Children
     if (children) {
@@ -276,7 +288,7 @@ export const Gui = {
       childContainer.classList.add('hidden');
       tree.appendChild(childContainer);
       children.forEach((childBox) => {
-        Gui.addBoxToTree(childBox, childContainer, listener);
+        Gui.addBoxToTree(childBox, childContainer, boxOutput, listener);
       });
     }
   },
@@ -307,13 +319,13 @@ export const Gui = {
     tree.appendChild(root);
     
     // Add File-Level Boxes
-    const htmlDisplayBlock = document.getElementById('main-content');
+    const boxOutput = document.getElementById('main-content');
     isoFile.parsedIsoFile.boxes.forEach((box) => {
       const listener = (event) => {
-        Gui.displayBox(box, htmlDisplayBlock);
+        Gui.displayBox(box, boxOutput);
       }
 
-      Gui.addBoxToTree(box, root, listener);
+      Gui.addBoxToTree(box, root, boxOutput, Gui.displayBox);
     })
 
     // Listeners

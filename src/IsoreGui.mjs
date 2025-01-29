@@ -263,7 +263,7 @@ export const Gui = {
   },
 
   addBoxToTree(box, tree) {
-    const boxMetadata = document.getElementById('box-metadata');
+    const htmlDisplayBlock = document.getElementById('main-content');
 
     const fourcc = box.type
     let children = box.boxes;
@@ -276,7 +276,7 @@ export const Gui = {
     li.textContent = fourcc; // box.type == 4cc
     tree.appendChild(li);
     li.addEventListener('click', (event) => {
-      Gui.displayBox(box, boxMetadata);
+      Gui.displayBox(box, htmlDisplayBlock);
     });
   
     // Add Children

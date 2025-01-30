@@ -18,11 +18,6 @@ export const Parser = {
     const mp4boxfile = MP4Box.createFile();
     mp4boxfile.appendBuffer(rawFile); // MP4Box expects an ArrayBuffer
     mp4boxfile.flush();
-
-    // Avoid this because there may be multiple meta boxes
-    // Shortcut to metabox
-    // mp4boxfile.meta = mp4boxfile.boxes.find((b) => b.type === 'meta');
-
     return mp4boxfile;
   },
 };

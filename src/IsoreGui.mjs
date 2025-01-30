@@ -215,19 +215,17 @@ export const Gui = {
     console.log('clicked item', item);
     const id = item.item_ID;
     console.log(id)
-    // const raw = isofile.getItemData(id);
-    // console.log('item: ', raw);
-    // decodeItem(item, raw);
   },
 
   decodeItem(item, raw) {
     // TODO: decodeItem doesn't belong in Gui
+    // Move it to a new file
     const item_type = item.item_type;
     if (item_type == 'mime') {
       console.log('mime item');
       const rawString = new TextDecoder().decode(raw);
       const prettyXML = xmlFormatter(rawString);
-      document.getElementById('main-content').textContent = prettyXML;
+      return prettyXML;
     } else {
       displayUnknownItem(item_type, raw);
     }

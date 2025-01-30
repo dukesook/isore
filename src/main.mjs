@@ -1,7 +1,6 @@
 import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
 import BoxDecoder from '/src/BoxDecoder.mjs';
-import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 
 
 // File Variables

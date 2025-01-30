@@ -1,7 +1,5 @@
 import Box from './Box.mjs';
 
-//TODO - move xmlFormatter out of gui code!!
-import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 
 export const Gui = {
   /**
@@ -266,7 +264,7 @@ export const Gui = {
     // }
   
     const boxElement = document.createElement('li');
-    boxElement.textContent = fourcc; // box.type == 4cc
+    boxElement.textContent = fourcc;
     tree.appendChild(boxElement);
 
     // Add Event Listener to li

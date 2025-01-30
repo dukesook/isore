@@ -9,7 +9,7 @@ class Box {
   children = [];    // Array - Optional. Contains child boxes
   parent = null;    // Box - Optional. Root Boxes don't have a parent
 
-  must_be(object) {
+  static must_be(object) {
     if (!(object instanceof Box)) {
       throw new Error('Expected a Box object but got: ' + typeof object);
     }

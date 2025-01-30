@@ -14,13 +14,20 @@ export const Parser = {
       return undefined;
     }
 
-    rawFile.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
-    const mp4boxfile = MP4Box.createFile();
-    mp4boxfile.appendBuffer(rawFile); // MP4Box expects an ArrayBuffer
-    mp4boxfile.flush();
+    const mp4boxfile = parseWithMp4Box(rawFile);
+    
     return mp4boxfile;
   },
 };
+
+// Private Functions
+function parseWithMp4Box(rawFile) {
+  rawFile.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
+  const mp4boxfile = MP4Box.createFile();
+  mp4boxfile.appendBuffer(rawFile); // MP4Box expects an ArrayBuffer
+  mp4boxfile.flush();
+  return mp4boxfile;
+}
 
 /**
  * Dynamically Load MP4Box

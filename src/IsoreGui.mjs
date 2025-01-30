@@ -317,10 +317,6 @@ export const Gui = {
     // Add File-Level Boxes
     const boxOutput = document.getElementById('main-content');
     isoFile.parsedIsoFile.boxes.forEach((box) => {
-      const listener = (event) => {
-        Gui.displayBox(box, boxOutput);
-      }
-
       Gui.addBoxToTree(box, root, boxOutput, Gui.displayBox);
     })
 

@@ -225,17 +225,14 @@ export const Gui = {
     const item_type = item.item_type;
     if (item_type == 'mime') {
       console.log('mime item');
-      displayXML(raw);
+      const rawString = new TextDecoder().decode(raw);
+      const prettyXML = xmlFormatter(rawString);
+      document.getElementById('main-content').textContent = prettyXML;
     } else {
       displayUnknownItem(item_type, raw);
     }
   },
 
-  displayXML(raw) {
-    const rawString = new TextDecoder().decode(raw);
-    const prettyXML = xmlFormatter(rawString);
-    document.getElementById('main-content').textContent = prettyXML;
-  },
 
   /**
    * @param {*} buffer 

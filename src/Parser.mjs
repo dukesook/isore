@@ -46,11 +46,12 @@ function toBoxArray(mp4boxfile) {
   return boxes;
 }
 
-function toBox(mp4box) {
+function toBox(mp4box_object, parent = null) {
   let new_box = new Box();
-  
+  new_box.parent = parent;
+
   // Update values when names don't match
-  Object.entries(mp4box).forEach(([key, value]) => {
+  Object.entries(mp4box_object).forEach(([key, value]) => {
     if (key === 'hdr_size') {
       new_box.hdr_size = value;
     }
@@ -62,7 +63,7 @@ function toBox(mp4box) {
     }
     else if (key === 'boxes' || key === "item_infos") {
       value.forEach((mp4box_child) => {
-        const child = toBox(mp4box_child);
+        const child = toBox(mp4box_child, new_box);
         new_box.children.push(child);
       });
     }

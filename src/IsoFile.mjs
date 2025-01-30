@@ -27,7 +27,7 @@ import Box from './Box.mjs';
  *
  */
 export class IsoFile {
-  raw = null; // ArrayBuffer of the unparsed ISO file.
+  raw = null; // ArrayBuffer of the entire ISO file.
   boxes = null; // Array of Boxes
 
   /**
@@ -43,7 +43,7 @@ export class IsoFile {
   }
 
   /**
-   * Computes the offset and length for a tile
+   * Computes the offset and length for an infe item
    */
   getOffsetAndLength(id, meta) {
     let offset = 0;

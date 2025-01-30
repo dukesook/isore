@@ -7,6 +7,7 @@ class Box {
   fourcc = null;    // String - The FourCC of the box
   uuid = null;      // String - Optional
   children = [];    // Array - Optional. Contains child boxes
+  parent = null;    // Box - Optional. Root Boxes don't have a parent
 }
 
 export default Box;

@@ -1,3 +1,5 @@
+import Box from './Box.mjs';
+
 export const Gui = {
   /**
    * Displays a list of items on the table.
@@ -237,18 +239,21 @@ export const Gui = {
 
   /**
    * 
-   * @param {*} box 
+   * @param {Box} box 
    * @param {*} tree 
    * @param {function(box; *, output: *)} listener 
    */
   addBoxToTree(box, tree, onclickBox) {
-
-    const fourcc = box.type
-    let children = box.boxes;
-  
-    if (fourcc == 'iinf') {
-      children = box.item_infos;
+    if (!(box instanceof Box)) {
+      throw new Error('addBoxToTree() expects a Box object but got: ' + typeof box);
     }
+
+    const fourcc = box.fourcc
+    let children = box.children;
+
+    // if (fourcc == 'iinf') {
+      // children = box.item_infos;
+    // }
   
     const boxElement = document.createElement('li');
     boxElement.textContent = fourcc; // box.type == 4cc
@@ -258,7 +263,7 @@ export const Gui = {
     boxElement.addEventListener('click', () => onclickBox(box));
 
     // Add Children
-    if (children) {
+    if (children.length > 0) {
       boxElement.classList.add('toggle');
       const childContainer = document.createElement('ul');
       childContainer.classList.add('hidden');
@@ -297,7 +302,7 @@ export const Gui = {
     tree.appendChild(root);
     
     // Add File-Level Boxes
-    isoFile.parsedIsoFile.boxes.forEach((box) => {
+    isoFile.boxes.forEach((box) => {
       Gui.addBoxToTree(box, root, onclickBox);
     })
 

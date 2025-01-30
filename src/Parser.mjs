@@ -1,4 +1,5 @@
 import { MP4Box } from './mp4box.all.js';
+import Box from './Box.mjs';
 
 /**
  * Parses HEIF file
@@ -15,8 +16,8 @@ export const Parser = {
     }
 
     const mp4boxfile = parseWithMp4Box(rawFile);
-    
-    return mp4boxfile;
+    const boxes = toBoxArray(mp4boxfile);
+    return boxes;
   },
 };
 
@@ -28,6 +29,54 @@ function parseWithMp4Box(rawFile) {
   mp4boxfile.flush();
   return mp4boxfile;
 }
+
+/**
+ * Convert the MP4Box output to an array of Box objects
+ * @param {*} mp4boxfile 
+ * @returns 
+ */
+function toBoxArray(mp4boxfile) {
+  const boxes = [];
+
+  mp4boxfile.boxes.forEach((mp4box) => {
+    let box = toBox(mp4box);
+    boxes.push(box);
+  });
+
+  return boxes;
+}
+
+function toBox(mp4box) {
+  let new_box = new Box();
+  
+  // Update values when names don't match
+  Object.entries(mp4box).forEach(([key, value]) => {
+    if (key === 'hdr_size') {
+      new_box.hdr_size = value;
+    }
+    else if (key === 'type') {
+      new_box.fourcc = value;
+    }
+    else if (key === 'data') {
+      new_box.raw = value;
+    }
+    else if (key === 'boxes' || key === "item_infos") {
+      value.forEach((mp4box_child) => {
+        const child = toBox(mp4box_child);
+        new_box.children.push(child);
+      });
+    }
+    else {
+      new_box[key] = value; // MP4Box & Box names match
+    }
+  });
+  return new_box;
+}
+
+
+
+
+
 
 /**
  * Dynamically Load MP4Box

@@ -28,7 +28,6 @@ import Box from './Box.mjs';
  */
 export class IsoFile {
   raw = null; // ArrayBuffer of the unparsed ISO file.
-  parsedIsoFile = null; // ISO file parsed into boxes.
   boxes = null; // Array of Boxes
 
   /**
@@ -40,7 +39,7 @@ export class IsoFile {
       throw new Error('IsoFile expects an ArrayBuffer but received ' + typeof rawIn + ' instead.');
     }
     this.raw = rawIn;
-    this.parsedIsoFile = Parser.parseIsoFile(rawIn);
+    this.boxes = Parser.parseIsoFile(rawIn);
   }
 
   /**

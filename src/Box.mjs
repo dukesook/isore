@@ -6,6 +6,7 @@ class Box {
   start = null;     // Number - The start of the box in the file
   fourcc = null;    // String - The FourCC of the box
   uuid = null;      // String - Optional
+  children = [];    // Array - Optional. Contains child boxes
 }
 
 export default Box;

@@ -199,7 +199,6 @@ export const Gui = {
     container.appendChild(table);
 
     Object.entries(box).forEach(([key, value]) => {
-      console.log(`${key}: ${box[key]}`);
       const row = document.createElement('tr');
       const keyCell = document.createElement('td');
       keyCell.textContent = key;
@@ -211,18 +210,11 @@ export const Gui = {
     });
   },
 
-  displayItem(item) {
-    console.log('clicked item', item);
-    const id = item.item_ID;
-    console.log(id)
-  },
-
   decodeItem(item, raw) {
     // TODO: decodeItem doesn't belong in Gui
     // Move it to a new file
     const item_type = item.item_type;
     if (item_type == 'mime') {
-      console.log('mime item');
       const rawString = new TextDecoder().decode(raw);
       const prettyXML = xmlFormatter(rawString);
       return prettyXML;
@@ -242,14 +234,6 @@ export const Gui = {
       .join(' '); // Join bytes with spaces
   },
 
-  displayUnknownItem(item_type, raw, htmlOutput) {
-    let message = 'Unknown item type: ' + item_type;
-    const hexData = arrayBufferToHex(raw);
-    if (hexData.length < 1000) {
-      message += '\n\nHexadecimal Data:\n' + hexData;
-    }
-    htmlOutput.textContent = message;
-  },
 
   /**
    * 

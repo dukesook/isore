@@ -1,5 +1,6 @@
 import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
+import BoxDecoder from '/src/BoxDecoder.mjs';
 import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 
 
@@ -44,7 +45,14 @@ function loadFile(arrayBuffer) {
   const tree = document.getElementById('box-tree');
   const boxOutput = document.getElementById('box-metadata');
   const onclickBox = (box) => {
+    
+    // Given a box, find it's raw data (if any)
+    let raw = null;
+
+    BoxDecoder.decode(box, raw);
+
     Gui.displayBox(box, boxOutput);
+
   }
   Gui.displayBoxTree(g_isofile, tree, onclickBox);
 

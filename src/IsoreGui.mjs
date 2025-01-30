@@ -184,9 +184,12 @@ export const Gui = {
     });
   },
 
+  /**
+   * 
+   * @param {*} box 
+   * @param {*} container  HTML Element
+   */
   displayBox(box, container) {
-    console.log(box);
-    console.log(typeof box);
     
     // Clear Previous Content
     container.innerHTML = '';
@@ -305,8 +308,9 @@ export const Gui = {
   /**
    * @param {IsoFile} isoFile 
    * @param {HTMLElement} tree
+   * @param 
    */
-  displayBoxTree(isoFile, tree) {
+  displayBoxTree(isoFile, tree, onclickBox) {
     // Clear Previous Content
     tree.innerHTML = '';
     
@@ -317,7 +321,7 @@ export const Gui = {
     // Add File-Level Boxes
     const boxOutput = document.getElementById('main-content');
     isoFile.parsedIsoFile.boxes.forEach((box) => {
-      Gui.addBoxToTree(box, root, boxOutput, Gui.displayBox);
+      Gui.addBoxToTree(box, root, boxOutput, onclickBox);
     })
 
     // Listeners

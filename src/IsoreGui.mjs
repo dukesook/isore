@@ -194,7 +194,7 @@ export const Gui = {
    * @param {*} box 
    * @param {*} container  HTML Element
    */
-  displayBox(box, container, raw = null) {
+  displayBox(box, container) {
     
     // Clear Previous Content
     container.innerHTML = '';
@@ -214,11 +214,14 @@ export const Gui = {
       table.appendChild(row);
     });
 
-    if (raw) {
-      let pre = document.createElement('pre');
-      container.appendChild(pre);
-      pre.textContent = Gui.decodeItem(box, raw);
-    }
+
+  },
+
+  displayText(string, container) {
+    container.innerHTML = '';
+    let pre = document.createElement('pre');
+    container.appendChild(pre);
+    pre.textContent = string;
   },
 
   decodeItem(item, raw) {
@@ -253,9 +256,7 @@ export const Gui = {
    * @param {function(box; *, output: *)} listener 
    */
   addBoxToTree(box, tree, onclickBox) {
-    if (!(box instanceof Box)) {
-      throw new Error('addBoxToTree() expects a Box object but got: ' + typeof box);
-    }
+    Box.must_be(box);
 
     const fourcc = box.fourcc
     let children = box.children;

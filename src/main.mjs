@@ -44,17 +44,22 @@ function loadFile(arrayBuffer) {
   // Display Box Tree
   const tree = document.getElementById('box-tree');
   const htmlContainer = document.getElementById('box-metadata');
+  const htmlDataContainer = document.getElementById('box-data');
   const onclickBox = (box) => {
     
-    // Given a box, find it's raw data (if any)
-    const raw = g_isofile.getItemData(box);
-    if (box.fourcc == 'infe') {
-      console.log('raw:', raw);
-    }
+    // Display Box
+    Gui.displayBox(box, htmlContainer);
     
-    BoxDecoder.decode(box, raw);
+    // Get Raw Data
+    const raw = g_isofile.getItemData(box);   
 
-    Gui.displayBox(box, htmlContainer, raw);
+    // Decode Data
+    const data = BoxDecoder.decode(box, raw);
+    
+    // Display Data
+    if (typeof data === 'string') {
+      Gui.displayText(data, htmlDataContainer);
+    }
 
   }
   Gui.displayBoxTree(g_isofile, tree, onclickBox);

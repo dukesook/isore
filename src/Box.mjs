@@ -8,6 +8,13 @@ class Box {
   uuid = null;      // String - Optional
   children = [];    // Array - Optional. Contains child boxes
   parent = null;    // Box - Optional. Root Boxes don't have a parent
-}
+
+  must_be(object) {
+    if (!(object instanceof Box)) {
+      throw new Error('Expected a Box object but got: ' + typeof object);
+    }
+  }
+
+} // Class Box
 
 export default Box;

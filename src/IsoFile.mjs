@@ -74,9 +74,8 @@ export class IsoFile {
   }
 
   getItemData(box) {
-    if (!(box instanceof Box)) {
-      throw Error('IsoFile::getItemData - Expecting a Box object but got ' + typeof box + ' instead.');
-    } else if (box.fourcc != 'infe') {
+    Box.must_be(box);
+    if (box.fourcc != 'infe') {
       console.log('warning: IsoFile::getItemData - Expecting a Box with fourcc=infe but got ' + box.fourcc + ' instead.');
       return;
     }

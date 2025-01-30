@@ -231,7 +231,6 @@ export const Gui = {
     }
   },
 
-
   /**
    * @param {*} buffer 
    * @returns {String}
@@ -252,14 +251,13 @@ export const Gui = {
     htmlOutput.textContent = message;
   },
 
-
   /**
    * 
    * @param {*} box 
    * @param {*} tree 
    * @param {function(box; *, output: *)} listener 
    */
-  addBoxToTree(box, tree, boxOutput, onclickBox) {
+  addBoxToTree(box, tree, onclickBox) {
 
     const fourcc = box.type
     let children = box.boxes;
@@ -272,9 +270,11 @@ export const Gui = {
     boxElement.textContent = fourcc; // box.type == 4cc
     tree.appendChild(boxElement);
 
+    /***********************************************/
     // Add Event Listener to li
-    boxElement.addEventListener('click', () => onclickBox(box, boxOutput));
-  
+    boxElement.addEventListener('click', () => onclickBox(box));
+    /***********************************************/
+
     // Add Children
     if (children) {
       boxElement.classList.add('toggle');
@@ -282,7 +282,7 @@ export const Gui = {
       childContainer.classList.add('hidden');
       tree.appendChild(childContainer);
       children.forEach((childBox) => {
-        Gui.addBoxToTree(childBox, childContainer, boxOutput, onclickBox);
+        Gui.addBoxToTree(childBox, childContainer, onclickBox);
       });
     }
   },
@@ -306,7 +306,7 @@ export const Gui = {
    * @param {HTMLElement} tree
    * @param 
    */
-  displayBoxTree(isoFile, tree, onclickBox, boxOutput) {
+  displayBoxTree(isoFile, tree, onclickBox) {
     // Clear Previous Content
     tree.innerHTML = '';
     
@@ -316,7 +316,7 @@ export const Gui = {
     
     // Add File-Level Boxes
     isoFile.parsedIsoFile.boxes.forEach((box) => {
-      Gui.addBoxToTree(box, root, boxOutput, onclickBox);
+      Gui.addBoxToTree(box, root, onclickBox);
     })
 
     // TODO: Combine with addBoxToTree()

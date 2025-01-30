@@ -43,6 +43,9 @@ function loadFile(arrayBuffer) {
   // Display Box Tree
   const tree = document.getElementById('box-tree');
   const boxOutput = document.getElementById('box-metadata');
-  Gui.displayBoxTree(g_isofile, tree, Gui.displayBox, boxOutput);
+  const onclickBox = (box) => {
+    Gui.displayBox(box, boxOutput);
+  }
+  Gui.displayBoxTree(g_isofile, tree, onclickBox);
 
 }

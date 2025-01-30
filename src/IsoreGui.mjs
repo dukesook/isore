@@ -270,10 +270,8 @@ export const Gui = {
     boxElement.textContent = fourcc; // box.type == 4cc
     tree.appendChild(boxElement);
 
-    /***********************************************/
     // Add Event Listener to li
     boxElement.addEventListener('click', () => onclickBox(box));
-    /***********************************************/
 
     // Add Children
     if (children) {

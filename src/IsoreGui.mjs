@@ -227,7 +227,7 @@ export const Gui = {
       const prettyXML = xmlFormatter(rawString);
       return prettyXML;
     } else {
-      displayUnknownItem(item_type, raw);
+      throw Error('Unknown item type: ' + item_type);
     }
   },
 
@@ -243,13 +243,13 @@ export const Gui = {
       .join(' '); // Join bytes with spaces
   },
 
-  displayUnknownItem(item_type, raw) {
+  displayUnknownItem(item_type, raw, htmlOutput) {
     let message = 'Unknown item type: ' + item_type;
     const hexData = arrayBufferToHex(raw);
     if (hexData.length < 1000) {
       message += '\n\nHexadecimal Data:\n' + hexData;
     }
-    document.getElementById('main-content').textContent = message;
+    htmlOutput.textContent = message;
   },
 
 
@@ -287,7 +287,8 @@ export const Gui = {
     }
   },
 
-  setTreeListeners() {
+  makeTreeExpandable() {
+    // TODO: Combine with addBoxToTree() - when you add a single box, then make it expandable
     // Add event listeners to all toggle elements
     document.querySelectorAll('.tree .toggle').forEach(toggle => {
       toggle.addEventListener('click', () => {
@@ -318,8 +319,8 @@ export const Gui = {
       Gui.addBoxToTree(box, root, boxOutput, onclickBox);
     })
 
-    // Listeners
-    Gui.setTreeListeners();
+    // TODO: Combine with addBoxToTree()
+    Gui.makeTreeExpandable();
   },
 
 }

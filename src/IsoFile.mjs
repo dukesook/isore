@@ -1,10 +1,9 @@
 import { Parser } from './Parser.mjs';
 import { ImageGrid } from './ImageGrid.mjs';
 import { RawImage } from './RawImage.mjs';
-import { ImagePyramid } from './ImagePyramid.mjs';
 
 /**
- * This class holds pertent information about an ISO file
+ * This class is a wrapper around the MP4Box output.
  *
  * @property meta Example:
  * meta = {
@@ -25,13 +24,10 @@ import { ImagePyramid } from './ImagePyramid.mjs';
  *  item_name
  * }
  *
- * @property {ImagePyramid} imagePyramid - See ImagePyramid.mjs
  */
 export class IsoFile {
   raw = null; // ArrayBuffer of the unparsed ISO file.
   parsedIsoFile = null; // ISO file parsed into boxes.
-  items = null; // Shortcut to the metabox items. uncC items will have a RawImage object.
-  imagePyramid = null;
 
   /**
    * Constructor

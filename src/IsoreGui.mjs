@@ -264,7 +264,7 @@ export const Gui = {
    * @param {*} tree 
    * @param {function(box; *, output: *)} listener 
    */
-  addBoxToTree(box, tree, boxOutput, listener) {
+  addBoxToTree(box, tree, boxOutput, onclickBox) {
 
     const fourcc = box.type
     let children = box.boxes;
@@ -273,21 +273,21 @@ export const Gui = {
       children = box.item_infos;
     }
   
-    const li = document.createElement('li');
-    li.textContent = fourcc; // box.type == 4cc
-    tree.appendChild(li);
+    const boxElement = document.createElement('li');
+    boxElement.textContent = fourcc; // box.type == 4cc
+    tree.appendChild(boxElement);
 
     // Add Event Listener to li
-    li.addEventListener('click', () => listener(box, boxOutput));
+    boxElement.addEventListener('click', () => onclickBox(box, boxOutput));
   
     // Add Children
     if (children) {
-      li.classList.add('toggle');
+      boxElement.classList.add('toggle');
       const childContainer = document.createElement('ul');
       childContainer.classList.add('hidden');
       tree.appendChild(childContainer);
       children.forEach((childBox) => {
-        Gui.addBoxToTree(childBox, childContainer, boxOutput, listener);
+        Gui.addBoxToTree(childBox, childContainer, boxOutput, onclickBox);
       });
     }
   },
@@ -310,7 +310,7 @@ export const Gui = {
    * @param {HTMLElement} tree
    * @param 
    */
-  displayBoxTree(isoFile, tree, onclickBox) {
+  displayBoxTree(isoFile, tree, onclickBox, boxOutput) {
     // Clear Previous Content
     tree.innerHTML = '';
     
@@ -319,7 +319,6 @@ export const Gui = {
     tree.appendChild(root);
     
     // Add File-Level Boxes
-    const boxOutput = document.getElementById('main-content');
     isoFile.parsedIsoFile.boxes.forEach((box) => {
       Gui.addBoxToTree(box, root, boxOutput, onclickBox);
     })

@@ -1,5 +1,8 @@
 import Box from './Box.mjs';
 
+//TODO - move xmlFormatter out of gui code!!
+import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
+
 export const Gui = {
   /**
    * Displays a list of items on the table.
@@ -191,7 +194,7 @@ export const Gui = {
    * @param {*} box 
    * @param {*} container  HTML Element
    */
-  displayBox(box, container) {
+  displayBox(box, container, raw = null) {
     
     // Clear Previous Content
     container.innerHTML = '';
@@ -210,6 +213,12 @@ export const Gui = {
       row.appendChild(valueCell);
       table.appendChild(row);
     });
+
+    if (raw) {
+      let pre = document.createElement('pre');
+      container.appendChild(pre);
+      pre.textContent = Gui.decodeItem(box, raw);
+    }
   },
 
   decodeItem(item, raw) {

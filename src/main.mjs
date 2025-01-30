@@ -43,15 +43,18 @@ function loadFile(arrayBuffer) {
 
   // Display Box Tree
   const tree = document.getElementById('box-tree');
-  const boxOutput = document.getElementById('box-metadata');
+  const htmlContainer = document.getElementById('box-metadata');
   const onclickBox = (box) => {
     
     // Given a box, find it's raw data (if any)
-    let raw = null;
-
+    const raw = g_isofile.getItemData(box);
+    if (box.fourcc == 'infe') {
+      console.log('raw:', raw);
+    }
+    
     BoxDecoder.decode(box, raw);
 
-    Gui.displayBox(box, boxOutput);
+    Gui.displayBox(box, htmlContainer, raw);
 
   }
   Gui.displayBoxTree(g_isofile, tree, onclickBox);

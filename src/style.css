@@ -34,3 +34,8 @@ th {
   border: 2px solid black;
   white-space: pre-wrap; /* Preserve Whitespace */
 }
+
+pre {
+  background-color: lightgreen;
+  border: 1px solid black;
+}

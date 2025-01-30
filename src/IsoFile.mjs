@@ -67,14 +67,23 @@ export class IsoFile {
    * @returns meta.iinf.item_infos[id]
    */
   getItem(id) {
+    // SEARCH ACROSS ALL METABOXES
     throw Error('IsoFile::getItem - Not implemented');
 
-    // SEARCH ACROSS ALL METABOXES
     return this.items.find((item) => item.item_ID == id);
   }
 
-  getItemData(id) {
-    return getItemDataIloc(this, id);
+  getItemData(box) {
+    if (!(box instanceof Box)) {
+      throw Error('IsoFile::getItemData - Expecting a Box object but got ' + typeof box + ' instead.');
+    } else if (box.fourcc != 'infe') {
+      console.log('warning: IsoFile::getItemData - Expecting a Box with fourcc=infe but got ' + box.fourcc + ' instead.');
+      return;
+    }
+    const iinf = box.parent;
+    const meta = iinf.parent;
+    const id = box.item_ID;
+    return getItemDataIloc(this, id, meta);
   }
 
   /**
@@ -122,6 +131,7 @@ function getItemDataIloc(isoFile, id, meta) {
   if (itemLocation.construction_method == 0) {
     buffer = rawFile; // Base Offset = file (absolute offset)
   } else if (itemLocation.construction_method == 1) {
+    console.log('meta:', meta);
     buffer = meta.idat.data.buffer; // Base Offset = idat
   }
 

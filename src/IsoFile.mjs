@@ -54,9 +54,9 @@ export class IsoFile {
   /**
    * Computes the offset and length for a tile
    */
-  getOffsetAndLength(id) {
+  getOffsetAndLength(id, meta) {
     let offset = 0;
-    const iloc = this.meta.iloc;
+    const iloc = meta.iloc;
     let infe_loc = iloc.items.find((item) => item.item_ID == id);
 
     const extents = infe_loc.extents;

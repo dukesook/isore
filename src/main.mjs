@@ -55,19 +55,18 @@ function loadFile(arrayBuffer) {
     // Display Box
     Gui.displayBox(box, htmlContainer);
     
-    // Get Raw Data
+    // Handle Box Data (if any)
     const raw = g_isofile.getItemData(box);   
+    if (raw) {
+      const data = BoxDecoder.decode(box, raw);
+      if (typeof data === 'string') {
+        Gui.displayText(data, htmlDataContainer);
+      }
+      else if (data instanceof RawImage) {
+        Gui.displayRawImage(data, canvas);
+      }
+    }
 
-    // Decode Data
-    const data = BoxDecoder.decode(box, raw);
-    
-    // Display Data
-    if (typeof data === 'string') {
-      Gui.displayText(data, htmlDataContainer);
-    }
-    else if (data instanceof RawImage) {
-      Gui.displayRawImage(data, canvas);
-    }
   }
 
   Gui.displayBoxTree(g_isofile, tree, onclickBox);

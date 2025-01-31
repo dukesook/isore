@@ -76,8 +76,7 @@ export class IsoFile {
   getItemData(box) {
     Box.must_be(box);
     if (box.fourcc != 'infe') {
-      console.log('warning: IsoFile::getItemData - Expecting a Box with fourcc=infe but got ' + box.fourcc + ' instead.');
-      return;
+      return null;
     }
     const iinf = box.parent;
     const meta = iinf.parent;

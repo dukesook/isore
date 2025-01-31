@@ -67,6 +67,9 @@ function loadFile(arrayBuffer) {
       }
     }
 
+    // Handle Track Data
+    const trakData = g_isofile.getTrackData(box);
+
   }
 
   Gui.displayBoxTree(g_isofile, tree, onclickBox);

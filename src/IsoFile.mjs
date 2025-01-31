@@ -84,6 +84,22 @@ export class IsoFile {
     return getItemDataIloc(this, id, meta);
   }
 
+  getTrackData(trak) {
+    Box.must_be(trak);
+    if (trak.fourcc != 'trak') {
+      return null;
+    }
+    console.log(trak);
+    console.log('sample1: ', trak.samples[0]);
+    for (const sample of trak.samples) {
+      // console.log(sample);
+      console.log('offset:', sample.offset);
+      console.log('sampleSize:', sample.size);
+
+    }
+
+  }
+
   /**
    * @param {RawImage} tile - Contains pixel data
    */

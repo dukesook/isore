@@ -61,7 +61,7 @@ function toBox(mp4box_object, parent = null) {
     else if (key === 'data') {
       new_box.raw = value;
     }
-    else if (key === 'boxes' || key === "item_infos") {
+    else if (key === 'boxes' || key === "item_infos" || key === 'entries') {
       value.forEach((mp4box_child) => {
         const child = toBox(mp4box_child, new_box);
         new_box.children.push(child);

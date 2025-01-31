@@ -1,5 +1,5 @@
 import Box from './Box.mjs';
-
+import RawImage from './RawImage.mjs';
 
 export const Gui = {
   /**
@@ -185,6 +185,15 @@ export const Gui = {
       let toIdsCell = row.insertCell();
       toIdsCell.textContent = reference.references.map((toId) => toId.to_item_ID).join(', ');
     });
+  },
+
+  displayRawImage(rawImage, container) {
+    // if html tag is canvas
+    if (container.tagName === 'CANVAS') {
+      container.width = rawImage.width;
+      container.height = rawImage.height;
+      RawImage.displayOnCanvas(rawImage, container);
+    }
   },
 
   /**

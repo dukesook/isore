@@ -22,52 +22,39 @@ export class RawImage {
     this.bandcount = bandcount;
   }
 
-  /**
-   * Add alpha channel
-   */
-  insertAlphaChannel() {
-    // Insert an alpha channel into the image data
-    if (this.bandcount == 4) {
-      return; // Image already has an alpha channel
-    } else if (this.bandcount != 3 && this.bandcount != 1) {
-      throw new Error('Image has ' + this.bandcount + ' bands. Only 1-band and 3-band images are supported.');
+  static must_be(object) {
+    if (!(object instanceof RawImage)) {
+      throw Error('rawImage must be an instance of RawImage');
     }
-
-    let rgba;
-    if (this.bandcount === 3) {
-      // For 3-band (RGB) images
-      rgba = new Uint8Array(this.width * this.height * 4);
-      for (let i = 0; i < this.pixels.length; i += 3) {
-        const j = (i * 4) / 3;
-        rgba[j + 0] = this.pixels[i + 0];
-        rgba[j + 1] = this.pixels[i + 1];
-        rgba[j + 2] = this.pixels[i + 2];
-        rgba[j + 3] = 255; // Alpha channel
-      }
-    } else if (this.bandcount === 1) {
-      // For 1-band (grayscale) images
-      rgba = new Uint8Array(this.width * this.height * 4);
-      for (let i = 0; i < this.pixels.length; i++) {
-        const j = i * 4;
-        rgba[j + 0] = this.pixels[i]; // Red
-        rgba[j + 1] = this.pixels[i]; // Green
-        rgba[j + 2] = this.pixels[i]; // Blue
-        rgba[j + 3] = 255; // Alpha channel
-      }
-    }
-
-    this.pixels = rgba;
-    this.bandcount = 4;
   }
 
-  /**
-   * Display on Canvas
-   */
-  displayOnCanvas(canvas, dx = 0, dy = 0) {
+
+  static displayOnCanvas(rawImage, canvas, dx = 0, dy = 0) {
+    RawImage.must_be(rawImage);
+    const width = rawImage.width;   // Number
+    const height = rawImage.height; // Number
+    const pixels = rawImage.pixels; // Uint8Array
+    const bandcount = rawImage.bandcount; // Number (default = 3)
+  
+    // Get canvas context
     const ctx = canvas.getContext('2d');
-    const imageData = ctx.createImageData(this.width, this.height);
-    this.insertAlphaChannel();
-    imageData.data.set(this.pixels);
+    canvas.width = width;
+    canvas.height = height;
+  
+    // Create an ImageData object
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data; // Uint8ClampedArray for the canvas
+  
+    // Copy raw pixel data into the ImageData buffer
+    for (let i = 0, j = 0; i < pixels.length; i += bandcount, j += 4) {
+      data[j] = pixels[i];     // R
+      data[j + 1] = pixels[i + 1]; // G
+      data[j + 2] = pixels[i + 2]; // B
+      data[j + 3] = bandcount === 4 ? pixels[i + 3] : 255; // A (fully opaque if no alpha)
+    }
+  
     ctx.putImageData(imageData, dx, dy);
   }
 }
+
+export default RawImage;

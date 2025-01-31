@@ -1,6 +1,9 @@
 import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
 import BoxDecoder from '/src/BoxDecoder.mjs';
+import RawImage from '/src/RawImage.mjs';
+
+
 
 
 // File Variables
@@ -44,6 +47,7 @@ function loadFile(arrayBuffer) {
   const tree = document.getElementById('box-tree');
   const htmlContainer = document.getElementById('box-metadata');
   const htmlDataContainer = document.getElementById('box-data');
+  const canvas = document.getElementById('canvas');
   const onclickBox = (box) => {
     
     // Display Box
@@ -58,6 +62,9 @@ function loadFile(arrayBuffer) {
     // Display Data
     if (typeof data === 'string') {
       Gui.displayText(data, htmlDataContainer);
+    }
+    else if (data instanceof RawImage) {
+      Gui.displayRawImage(data, canvas);
     }
 
   }

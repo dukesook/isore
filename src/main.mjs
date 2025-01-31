@@ -48,6 +48,8 @@ function loadFile(arrayBuffer) {
   const htmlContainer = document.getElementById('box-metadata');
   const htmlDataContainer = document.getElementById('box-data');
   const canvas = document.getElementById('canvas');
+  
+  // On Click Box
   const onclickBox = (box) => {
     
     // Display Box
@@ -66,8 +68,8 @@ function loadFile(arrayBuffer) {
     else if (data instanceof RawImage) {
       Gui.displayRawImage(data, canvas);
     }
-
   }
+
   Gui.displayBoxTree(g_isofile, tree, onclickBox);
 
 }

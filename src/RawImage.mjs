@@ -22,9 +22,13 @@ export class RawImage {
     this.bandcount = bandcount;
   }
 
-  static must_be(object) {
+  static must_be(object, fourcc = null) {
     if (!(object instanceof RawImage)) {
       throw Error('rawImage must be an instance of RawImage');
+    }
+
+    if (fourcc && object.fourcc !== fourcc) {
+      throw Error('Expected a RawImage with fourcc=' + fourcc + ' but got ' + object.fourcc + ' instead.');
     }
   }
 

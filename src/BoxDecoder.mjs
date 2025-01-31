@@ -4,10 +4,35 @@ import RawImage from './RawImage.mjs';
 
 export const BoxDecoder = {
 
-  decode_unci(box, raw) {
-    Box.must_be(box);
-    const width = 1024;
-    const height = 1024;
+  decode_unci(unci, raw) {
+    Box.must_be(unci);
+    let ispe = null;
+    let uncC = null;
+    let cmpd = null;
+
+    const properties = Box.getItemProperties(unci);
+    for (const property of properties) {
+      if (property.fourcc == 'ispe') {
+        ispe = property;
+      } else if (property.fourcc == 'uncC') {
+        uncC = property;
+      } else if (property.fourcc == 'cmpd') {
+        cmpd = property;
+      }
+    }
+
+    if (!ispe) {
+      throw Error('Missing ispe property');
+    } else if (!uncC) {
+      throw Error('Missing uncC property');
+    } else if (!cmpd) {
+      // Check if uncC version is 1
+    }
+
+    const width = ispe.image_width;
+    const height = ispe.image_height;
+
+
     const pixels = new Uint8Array(raw);
     const rawImage = new RawImage(pixels, width, height);
     return rawImage;

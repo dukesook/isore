@@ -45,7 +45,7 @@ function loadFile(arrayBuffer) {
 
   // Display Box Tree
   const tree = document.getElementById('box-tree');
-  const htmlContainer = document.getElementById('box-metadata');
+  const htmlContainer = document.getElementById('box-tree-dump');
   const mdatContainer = document.getElementById('mdat-display');
   const canvas = document.getElementById('canvas');
 

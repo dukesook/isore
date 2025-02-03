@@ -45,22 +45,22 @@ function loadFile(arrayBuffer) {
 
   // Display Box Tree
   const tree = document.getElementById('box-tree');
-  const htmlContainer = document.getElementById('box-tree-dump');
+  const boxTreeDump = document.getElementById('box-tree-dump');
   const mdatContainer = document.getElementById('mdat-display');
   const canvas = document.getElementById('canvas');
 
   // Create Callback
-  const callback = createBoxTreeListener(htmlContainer, mdatContainer, canvas);
+  const callback = createBoxTreeListener(boxTreeDump, mdatContainer, canvas);
 
   Gui.displayBoxTree(g_isofile, tree, callback);
 
 }
 
 
-function createBoxTreeListener(htmlContainer, mdatContainer, canvas) {
+function createBoxTreeListener(boxTreeDump, mdatContainer, canvas) {
   const boxTreeListener = function (box) {
     // Display Box
-    Gui.displayBox(box, htmlContainer);
+    Gui.displayBox(box, boxTreeDump);
 
     // Handle Box Data (if any)
     const raw = g_isofile.getBoxData(box);   

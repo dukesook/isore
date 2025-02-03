@@ -11,7 +11,6 @@ table {
 }
 
 tr {
-  /* background-color: gray; */
   background-color: lightgrey;
 }
 
@@ -21,18 +20,13 @@ th {
 
 .flexbox {
   display:flex;
-  /* margin: 1em; */
 }
 
 .flexbox div {
+  border: 1px solid black;
   margin: 1em;
   min-width: 10em;
   min-height: 20em;
-}
-
-#main-content {
-  border: 2px solid black;
-  white-space: pre-wrap; /* Preserve Whitespace */
 }
 
 pre {

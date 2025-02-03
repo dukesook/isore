@@ -48,7 +48,8 @@ function loadFile(arrayBuffer) {
   const htmlContainer = document.getElementById('box-metadata');
   const mdatContainer = document.getElementById('mdat-display');
   const canvas = document.getElementById('canvas');
-  
+
+  // Create Callback
   const callback = createBoxTreeListener(htmlContainer, mdatContainer, canvas);
 
   Gui.displayBoxTree(g_isofile, tree, callback);

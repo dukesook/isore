@@ -66,6 +66,9 @@ export const BoxDecoder = {
     if (box.fourcc == 'infe') {
       return BoxDecoder.decodeItem(box, raw);
     }
+    else if (box.fourcc == 'trak') {
+      return raw;
+    }
     else {
       // console.log(box);
     }

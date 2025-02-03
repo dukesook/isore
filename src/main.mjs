@@ -46,32 +46,32 @@ function loadFile(arrayBuffer) {
   // Display Box Tree
   const tree = document.getElementById('box-tree');
   const htmlContainer = document.getElementById('box-metadata');
-  const htmlDataContainer = document.getElementById('box-data');
+  const mdatContainer = document.getElementById('mdat-display');
   const canvas = document.getElementById('canvas');
   
-  // On Click Box
-  const onclickBox = (box) => {
-    
+  const callback = createBoxTreeListener(htmlContainer, mdatContainer, canvas);
+
+  Gui.displayBoxTree(g_isofile, tree, callback);
+
+}
+
+
+function createBoxTreeListener(htmlContainer, mdatContainer, canvas) {
+  const boxTreeListener = function (box) {
     // Display Box
     Gui.displayBox(box, htmlContainer);
-    
+
     // Handle Box Data (if any)
-    const raw = g_isofile.getItemData(box);   
+    const raw = g_isofile.getBoxData(box);   
     if (raw) {
       const data = BoxDecoder.decode(box, raw);
       if (typeof data === 'string') {
-        Gui.displayText(data, htmlDataContainer);
+        Gui.displayText(data, mdatContainer);
       }
       else if (data instanceof RawImage) {
         Gui.displayRawImage(data, canvas);
       }
     }
-
-    // Handle Track Data
-    const trakData = g_isofile.getTrackData(box);
-
   }
-
-  Gui.displayBoxTree(g_isofile, tree, onclickBox);
-
+  return boxTreeListener;
 }

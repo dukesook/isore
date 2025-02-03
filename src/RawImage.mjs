@@ -16,6 +16,12 @@ export class RawImage {
     if (!pixels || !width || !height) {
       throw Error('RawImage constructor expects pixels, width, and height as arguments.');
     }
+    
+    // If pixels is an arraybuffer, convert it to an Uint8Array
+    if (pixels instanceof ArrayBuffer) {
+      pixels = new Uint8Array(pixels);
+    }
+
     this.pixels = pixels;
     this.width = width;
     this.height = height;

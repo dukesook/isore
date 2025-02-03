@@ -73,30 +73,38 @@ export class IsoFile {
     return this.items.find((item) => item.item_ID == id);
   }
 
-  getItemData(box) {
+  getBoxData(box) {
     Box.must_be(box);
-    if (box.fourcc != 'infe') {
-      return null;
+    if (box.fourcc == 'infe') {
+      const iinf = box.parent;
+      const meta = iinf.parent;
+      const id = box.item_ID;
+      return getItemDataIloc(this, id, meta);
     }
-    const iinf = box.parent;
-    const meta = iinf.parent;
-    const id = box.item_ID;
-    return getItemDataIloc(this, id, meta);
+    else if (box.fourcc == 'trak') {
+      return this.getTrackData(box, this.raw);
+    }
+
   }
 
-  getTrackData(trak) {
+  getTrackData(trak, raw) {
     Box.must_be(trak);
     if (trak.fourcc != 'trak') {
       return null;
     }
     console.log(trak);
     console.log('sample1: ', trak.samples[0]);
-    for (const sample of trak.samples) {
-      // console.log(sample);
-      console.log('offset:', sample.offset);
-      console.log('sampleSize:', sample.size);
 
-    }
+    const sample = trak.samples[0];
+    const offset = sample.offset;
+    const sampleSize = sample.size;
+    console.log('offset:', sample.offset);
+    console.log('sampleSize:', sample.size);
+    const sampleData = raw.slice(offset, offset + sampleSize);
+    const rawImage = new RawImage(sampleData, 1024, 1024);
+    return rawImage;
+      
+
 
   }
 

@@ -188,6 +188,9 @@ export const Gui = {
   },
 
   displayRawImage(rawImage, container) {
+    RawImage.must_be(rawImage);
+    container.style.display = 'block';
+
     // if html tag is canvas
     if (container.tagName === 'CANVAS') {
       container.width = rawImage.width;
@@ -224,8 +227,13 @@ export const Gui = {
 
   },
 
+  hideContainer(container) {
+    container.style.display = 'none';
+  },
+
   displayText(string, container) {
     container.innerHTML = '';
+    container.style.display = 'block';
     let pre = document.createElement('pre');
     container.appendChild(pre);
     pre.textContent = string;

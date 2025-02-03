@@ -46,18 +46,18 @@ function loadFile(arrayBuffer) {
   // Display Box Tree
   const tree = document.getElementById('box-tree');
   const boxTreeDump = document.getElementById('box-tree-dump');
-  const mdatContainer = document.getElementById('mdat-display');
-  const canvas = document.getElementById('canvas');
+  const mdatCanvas = document.getElementById('mdat-canvas');
+  const mdatText = document.getElementById('mdat-text');
 
   // Create Callback
-  const callback = createBoxTreeListener(boxTreeDump, mdatContainer, canvas);
+  const callback = createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
 
   Gui.displayBoxTree(g_isofile, tree, callback);
 
 }
 
 
-function createBoxTreeListener(boxTreeDump, mdatContainer, canvas) {
+function createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
   const boxTreeListener = function (box) {
     // Display Box
     Gui.displayBox(box, boxTreeDump);
@@ -67,10 +67,12 @@ function createBoxTreeListener(boxTreeDump, mdatContainer, canvas) {
     if (raw) {
       const data = BoxDecoder.decode(box, raw);
       if (typeof data === 'string') {
-        Gui.displayText(data, mdatContainer);
+        Gui.displayText(data, mdatText);
+        Gui.hideContainer(mdatCanvas);
       }
       else if (data instanceof RawImage) {
-        Gui.displayRawImage(data, canvas);
+        Gui.displayRawImage(data, mdatCanvas);
+        Gui.hideContainer(mdatText);
       }
     }
   }

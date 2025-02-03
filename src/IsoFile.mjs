@@ -104,15 +104,15 @@ export class IsoFile {
     console.log(trak);
     console.log('sample1: ', trak.samples[0]);
 
-    const sample = trak.samples[0];
-    const offset = sample.offset;
-    const sampleSize = sample.size;
-    console.log('offset:', sample.offset);
-    console.log('sampleSize:', sample.size);
-    const sampleData = raw.slice(offset, offset + sampleSize);
-    const rawImage = new RawImage(sampleData, 1024, 1024);
-
-    imageSequence.addImage(rawImage);
+    for (let i = 0; i < trak.samples.length; i++) {
+      const sample = trak.samples[i];
+      console.log('sample: ', sample);
+      const offset = sample.offset;
+      const sampleSize = sample.size;
+      const sampleData = raw.slice(offset, offset + sampleSize);
+      const rawImage = new RawImage(sampleData, 1024, 1024);
+      imageSequence.addImage(rawImage);
+    }
 
     return imageSequence;
       

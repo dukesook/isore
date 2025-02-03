@@ -1,4 +1,5 @@
 import Box from './Box.mjs';
+import ImageSequence from './ImageSequence.mjs';
 import RawImage from './RawImage.mjs';
 
 export const Gui = {
@@ -197,6 +198,12 @@ export const Gui = {
       container.height = rawImage.height;
       RawImage.displayOnCanvas(rawImage, container);
     }
+  },
+
+  displayImageSequence(imageSequence, container) {
+    ImageSequence.must_be(imageSequence);
+    container.style.display = 'block';
+    
   },
 
   /**

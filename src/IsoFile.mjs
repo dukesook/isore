@@ -1,6 +1,8 @@
 import { Parser } from './Parser.mjs';
 import { ImageGrid } from './ImageGrid.mjs';
 import { RawImage } from './RawImage.mjs';
+import ImageSequence from './ImageSequence.mjs';
+import BoxDecoder from './BoxDecoder.mjs';
 import Box from './Box.mjs';
 
 /**
@@ -75,15 +77,19 @@ export class IsoFile {
 
   getBoxData(box) {
     Box.must_be(box);
+    let boxData = null;
     if (box.fourcc == 'infe') {
       const iinf = box.parent;
       const meta = iinf.parent;
       const id = box.item_ID;
-      return getItemDataIloc(this, id, meta);
+      boxData = getItemDataIloc(this, id, meta);
     }
     else if (box.fourcc == 'trak') {
-      return this.getTrackData(box, this.raw);
+      boxData = this.getTrackData(box, this.raw);
     }
+
+    const data = BoxDecoder.decode(box, boxData);
+    return data;
 
   }
 
@@ -92,6 +98,9 @@ export class IsoFile {
     if (trak.fourcc != 'trak') {
       return null;
     }
+
+    const imageSequence = new ImageSequence();
+
     console.log(trak);
     console.log('sample1: ', trak.samples[0]);
 
@@ -102,7 +111,10 @@ export class IsoFile {
     console.log('sampleSize:', sample.size);
     const sampleData = raw.slice(offset, offset + sampleSize);
     const rawImage = new RawImage(sampleData, 1024, 1024);
-    return rawImage;
+
+    imageSequence.addImage(rawImage);
+
+    return imageSequence;
       
 
 

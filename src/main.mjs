@@ -2,6 +2,7 @@ import { IsoFile } from '/src/IsoFile.mjs';
 import { Gui } from '/src/IsoreGui.mjs';
 import BoxDecoder from '/src/BoxDecoder.mjs';
 import RawImage from '/src/RawImage.mjs';
+import ImageSequence from './ImageSequence.mjs';
 
 
 
@@ -63,18 +64,22 @@ function createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
     Gui.displayBox(box, boxTreeDump);
 
     // Handle Box Data (if any)
-    const raw = g_isofile.getBoxData(box);   
-    if (raw) {
-      const data = BoxDecoder.decode(box, raw);
-      if (typeof data === 'string') {
-        Gui.displayText(data, mdatText);
-        Gui.hideContainer(mdatCanvas);
-      }
-      else if (data instanceof RawImage) {
-        Gui.displayRawImage(data, mdatCanvas);
-        Gui.hideContainer(mdatText);
-      }
+    const data = g_isofile.getBoxData(box);
+    if (!data) {
+      // Do Nothing
+    } else if (typeof data === 'string') {
+      Gui.displayText(data, mdatText);
+      Gui.hideContainer(mdatCanvas);
+    } else if (data instanceof RawImage) {
+      Gui.displayRawImage(data, mdatCanvas);
+      Gui.hideContainer(mdatText);
+    } else if (data instanceof ImageSequence) {
+      const image = data.images[0];
+      Gui.displayRawImage(image, mdatCanvas);      
+      Gui.hideContainer(mdatText);
     }
   }
   return boxTreeListener;
 }
+
+

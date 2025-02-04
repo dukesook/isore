@@ -6,7 +6,6 @@ import ImageSequence from './ImageSequence.mjs';
 
 
 // File Variables
-let g_isofile = null
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
@@ -20,6 +19,8 @@ const htmlImageWidth = document.getElementById('image-width');
 const htmlImageHeight = document.getElementById('image-height');
 
 export const Isore = {
+  g_isofile: null,
+
 
   loadLocalFile(file, successCallback, errCallback) {
     const reader = new FileReader();
@@ -42,7 +43,7 @@ export const Isore = {
 
   loadFile(arrayBuffer) {
     // Create IsoFile object
-    g_isofile = new IsoFile(arrayBuffer);
+    Isore.g_isofile = new IsoFile(arrayBuffer);
   
     // Display Box Tree
     const tree = document.getElementById('box-tree');
@@ -53,7 +54,7 @@ export const Isore = {
     // Create Callback
     const callback = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
   
-    Gui.displayBoxTree(g_isofile, tree, callback);
+    Gui.displayBoxTree(Isore.g_isofile, tree, callback);
   
   },
 
@@ -63,14 +64,14 @@ export const Isore = {
       Gui.displayBox(box, boxTreeDump);
   
       // Handle Box Data (if any)
-      const data = g_isofile.getBoxData(box);
+      const data = Isore.g_isofile.getBoxData(box);
       if (!data) {
         // Do Nothing
       } else if (typeof data === 'string') {
         Gui.displayText(data, mdatText);
         Gui.hideContainer(mdatCanvas);
       } else if (data instanceof RawImage) {
-        displayRawImage(data, mdatCanvas);
+        Isore.displayRawImage(data, mdatCanvas);
         Gui.hideContainer(mdatText);
       } else if (data instanceof ImageSequence) {
         Isore.displayImageSequence(data, mdatCanvas);
@@ -85,7 +86,7 @@ export const Isore = {
     const firstImage = sequence.images[0];
     const frameCount = sequence.images.length;
     htmlFrameCount.innerText = frameCount;
-    displayRawImage(firstImage, container);      
+    Isore.displayRawImage(firstImage, container);      
     let imageIndex = 0;
     htmlFrameNumber.innerText = imageIndex + 1;
   
@@ -93,7 +94,7 @@ export const Isore = {
       imageIndex = (imageIndex + delta + frameCount) % frameCount;
       htmlFrameNumber.innerText = imageIndex + 1;
       const nextImage = sequence.images[imageIndex];
-      displayRawImage(nextImage, container);
+      Isore.displayRawImage(nextImage, container);
     }
   
     nextButton.onclick = () => nextImage(1);
@@ -104,7 +105,14 @@ export const Isore = {
       // TODO
     }
   
-  }
+  },
+
+  displayRawImage(image, container) {
+    RawImage.must_be(image);
+    htmlImageWidth.innerText = image.width;
+    htmlImageHeight.innerText = image.height;
+    Gui.displayRawImage(image, container);
+  },
 
 }
 
@@ -114,16 +122,6 @@ fileInput.addEventListener('change', (event) => {
     Isore.loadLocalFile(file, Isore.loadFile, console.log);
   }
 });
-
-
-
-
-function displayRawImage(image, container) {
-  RawImage.must_be(image);
-  htmlImageWidth.innerText = image.width;
-  htmlImageHeight.innerText = image.height;
-  Gui.displayRawImage(image, container);
-}
 
 
 

@@ -1,5 +1,10 @@
 body {
-  background-color:lightblue;
+  background-color:lightgray;
+}
+
+.control-bar {
+  background-color: white;
+  border: 1px solid black;
 }
 
 caption {
@@ -18,11 +23,11 @@ th {
   background-color: gray;
 }
 
-.flexbox {
+.box-tree {
   display:flex;
 }
 
-.flexbox div {
+.box-tree div {
   border: 1px solid black;
   margin: 1em;
   min-width: 10em;

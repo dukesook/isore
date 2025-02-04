@@ -13,6 +13,7 @@ let g_isofile = null
 // HTML Elements
 const fileInput = document.getElementById('file-input');
 const nextButton = document.getElementById('next-button');
+const backButton = document.getElementById('back-button');
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
@@ -75,19 +76,32 @@ function createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
       Gui.displayRawImage(data, mdatCanvas);
       Gui.hideContainer(mdatText);
     } else if (data instanceof ImageSequence) {
-      const firstImage = data.images[0];
-      Gui.displayRawImage(firstImage, mdatCanvas);      
-      Gui.hideContainer(mdatText);
-      let imageIndex = 0;
-      nextButton.onclick = function () {
-        imageIndex = (imageIndex + 1) % data.images.length;
-        const nextImage = data.images[imageIndex];
-        Gui.displayRawImage(nextImage, mdatCanvas);
-      }
-
+      displayImageSequence(data, mdatCanvas);
     }
   }
   return boxTreeListener;
+}
+
+function displayImageSequence(sequence, container) {
+  ImageSequence.must_be(sequence);
+
+  const firstImage = sequence.images[0];
+  const frameCount = sequence.images.length;
+  Gui.displayRawImage(firstImage, container);      
+  let imageIndex = 0;
+
+  nextButton.onclick = function () {
+    imageIndex = (imageIndex + 1) % frameCount;
+    const nextImage = sequence.images[imageIndex];
+    Gui.displayRawImage(nextImage, container);
+  }
+
+  backButton.onclick = function () {
+    imageIndex = (imageIndex - 1 + frameCount) % frameCount;
+    const nextImage = sequence.images[imageIndex];
+    Gui.displayRawImage(nextImage, container);
+  }
+
 }
 
 

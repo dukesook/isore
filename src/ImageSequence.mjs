@@ -4,7 +4,7 @@ export class ImageSequence {
   images = [];
   fps = null;
 
-  must_be(imageSequence) {
+  static must_be(imageSequence) {
     if (!(imageSequence instanceof ImageSequence)) {
       throw new Error('ImageSequence expected but received ' + typeof imageSequence + ' instead.');
     }

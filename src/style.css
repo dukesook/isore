@@ -1,10 +1,19 @@
 body {
-  background-color:lightgray;
+  background-color:white;
 }
 
 .control-bar {
-  background-color: white;
+  display: flex;
+  /* justify-content: space-around; */
+  align-items: center;
+  background-color: lightgreen;
   border: 1px solid black;
+  min-height: 3em;
+}
+
+.control-bar-options {
+  display: flex;
+  flex-direction: column;
 }
 
 caption {

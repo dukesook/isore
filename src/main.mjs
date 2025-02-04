@@ -12,8 +12,10 @@ let g_isofile = null
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
-const htmlNextButton = document.getElementById('next-button');
-const htmlBackButton = document.getElementById('back-button');
+const nextButton = document.getElementById('next-button');
+const backButton = document.getElementById('back-button');
+const playButton = document.getElementById('play-button');
+const pauseButton = document.getElementById('pause-button');
 const htmlFrameNumber = document.getElementById('current-frame-number');
 const htmlFrameCount = document.getElementById('frame-count');
 const htmlImageWidth = document.getElementById('image-width');
@@ -103,9 +105,10 @@ function displayImageSequence(sequence, container) {
     displayRawImage(nextImage, container);
   }
 
-  htmlNextButton.onclick = () => nextImage(1);
+  nextButton.onclick = () => nextImage(1);
   
-  htmlBackButton.onclick = () => nextImage(-1);
+  backButton.onclick = () => nextImage(-1);
+
 
 }
 

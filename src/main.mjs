@@ -85,20 +85,38 @@ export const Isore = {
     Isore.displayRawImage(firstImage, container);      
     let imageIndex = 0;
     htmlFrameNumber.innerText = imageIndex + 1;
-  
+    let playing = false;
+
     function nextImage(delta) {
       imageIndex = (imageIndex + delta + frameCount) % frameCount;
       htmlFrameNumber.innerText = imageIndex + 1;
       const nextImage = sequence.images[imageIndex];
       Isore.displayRawImage(nextImage, container);
     }
+
+    function renderNext() {
+      if (!playing) {
+        return;
+      }
+      nextImage(1);
+      setTimeout(renderNext, 800);
+    }
   
     nextButton.onclick = () => nextImage(1);
     
     backButton.onclick = () => nextImage(-1);
   
-    playButton.onclick = function () {
-      // TODO
+    playButton.onclick = function beginPlay() {
+      if (playing) {
+        return;
+      }
+      playing = true;
+      renderNext();
+
+    }
+
+    pauseButton.onclick = function pause() {
+      playing = false;
     }
   
   },

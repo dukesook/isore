@@ -38,6 +38,7 @@ th {
 
 .box-tree div {
   border: 1px solid black;
+  background-color: lightgreen;
   margin: 1em;
   min-width: 10em;
   min-height: 20em;

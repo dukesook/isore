@@ -11,6 +11,8 @@
 
   <h1>ISORE</h1>
   <h2>Open-Source ISO-BMFF Reader</h2>
+
+  <!-- Control Bar -->
   <div class="control-bar">
     <input id="file-input" type="file"> </input>
 
@@ -28,17 +30,21 @@
         <input id="feature1.3" type="radio" name="feature1"> </input>
       </div>
     </div>
-  
-  </div>
+
+  </div> <!-- Control Bar -->
+
+  <!-- Box Tree -->
   <div class="box-tree">
     <div id="box-tree" class="tree">Box Tree</div>
     <div id="box-tree-dump">Box Tree Dump</div>
-  </div>
+  </div>  <!-- Box Tree -->
+
+  <!-- mdat Output -->
   <div id="mdat-output">
     <canvas id="mdat-canvas" style="border: 1px solid black"></canvas>
     <pre id="mdat-text" style="display: none">mdat-text</pre>
     <button id="next-button" type="button">Next</button>
-  </div>
+  </div> <!-- mdat Output -->
 
 </body>
 

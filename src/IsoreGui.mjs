@@ -343,3 +343,5 @@ export const Gui = {
   },
 
 }
+
+export default Gui;

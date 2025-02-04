@@ -1,11 +1,8 @@
-import { IsoFile } from '/src/IsoFile.mjs';
-import { Gui } from '/src/IsoreGui.mjs';
-import BoxDecoder from '/src/BoxDecoder.mjs';
-import RawImage from '/src/RawImage.mjs';
+import IsoFile from './IsoFile.mjs';
+import Gui from './IsoreGui.mjs';
+import RawImage from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 
-
-// File Variables
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
@@ -19,8 +16,7 @@ const htmlImageWidth = document.getElementById('image-width');
 const htmlImageHeight = document.getElementById('image-height');
 
 export const Isore = {
-  g_isofile: null,
-
+  isofile: null,
 
   loadLocalFile(file, successCallback, errCallback) {
     const reader = new FileReader();
@@ -43,7 +39,7 @@ export const Isore = {
 
   loadFile(arrayBuffer) {
     // Create IsoFile object
-    Isore.g_isofile = new IsoFile(arrayBuffer);
+    Isore.isofile = new IsoFile(arrayBuffer);
   
     // Display Box Tree
     const tree = document.getElementById('box-tree');
@@ -54,7 +50,7 @@ export const Isore = {
     // Create Callback
     const callback = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
   
-    Gui.displayBoxTree(Isore.g_isofile, tree, callback);
+    Gui.displayBoxTree(Isore.isofile, tree, callback);
   
   },
 
@@ -64,7 +60,7 @@ export const Isore = {
       Gui.displayBox(box, boxTreeDump);
   
       // Handle Box Data (if any)
-      const data = Isore.g_isofile.getBoxData(box);
+      const data = Isore.isofile.getBoxData(box);
       if (!data) {
         // Do Nothing
       } else if (typeof data === 'string') {

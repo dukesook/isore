@@ -177,3 +177,5 @@ function getItemDataIloc(isoFile, id, meta) {
   const itemData = buffer.slice(offset, end);
   return itemData;
 }
+
+export default IsoFile;

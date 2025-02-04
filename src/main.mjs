@@ -96,19 +96,16 @@ function displayImageSequence(sequence, container) {
   let imageIndex = 0;
   htmlFrameNumber.innerText = imageIndex + 1;
 
-  htmlNextButton.onclick = function () {
-    imageIndex = (imageIndex + 1) % frameCount;
+  function nextImage(delta) {
+    imageIndex = (imageIndex + delta + frameCount) % frameCount;
     htmlFrameNumber.innerText = imageIndex + 1;
     const nextImage = sequence.images[imageIndex];
     displayRawImage(nextImage, container);
   }
+
+  htmlNextButton.onclick = () => nextImage(1);
   
-  htmlBackButton.onclick = function () {
-    imageIndex = (imageIndex - 1 + frameCount) % frameCount;
-    htmlFrameNumber.innerText = imageIndex + 1;
-    const nextImage = sequence.images[imageIndex];
-    displayRawImage(nextImage, container);
-  }
+  htmlBackButton.onclick = () => nextImage(-1);
 
 }
 

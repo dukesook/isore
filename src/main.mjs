@@ -21,101 +21,102 @@ const htmlImageHeight = document.getElementById('image-height');
 
 export const Isore = {
 
+  loadLocalFile(file, successCallback, errCallback) {
+    const reader = new FileReader();
+  
+    // If success
+    reader.onload = function (event) {
+      const localFile = event.target.result; // ArrayBuffer
+      successCallback(localFile);
+    };
+  
+    // If error
+    reader.onerror = function (error) {
+      console.error('Error reading file:', error);
+      errCallback();
+    };
+  
+    // Execute!
+    reader.readAsArrayBuffer(file);
+  },
+
+  loadFile(arrayBuffer) {
+    // Create IsoFile object
+    g_isofile = new IsoFile(arrayBuffer);
+  
+    // Display Box Tree
+    const tree = document.getElementById('box-tree');
+    const boxTreeDump = document.getElementById('box-tree-dump');
+    const mdatCanvas = document.getElementById('mdat-canvas');
+    const mdatText = document.getElementById('mdat-text');
+  
+    // Create Callback
+    const callback = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
+  
+    Gui.displayBoxTree(g_isofile, tree, callback);
+  
+  },
+
+  createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
+    const boxTreeListener = function (box) {
+      // Display Box
+      Gui.displayBox(box, boxTreeDump);
+  
+      // Handle Box Data (if any)
+      const data = g_isofile.getBoxData(box);
+      if (!data) {
+        // Do Nothing
+      } else if (typeof data === 'string') {
+        Gui.displayText(data, mdatText);
+        Gui.hideContainer(mdatCanvas);
+      } else if (data instanceof RawImage) {
+        displayRawImage(data, mdatCanvas);
+        Gui.hideContainer(mdatText);
+      } else if (data instanceof ImageSequence) {
+        Isore.displayImageSequence(data, mdatCanvas);
+      }
+    }
+    return boxTreeListener;
+  },
+
+  displayImageSequence(sequence, container) {
+    ImageSequence.must_be(sequence);
+  
+    const firstImage = sequence.images[0];
+    const frameCount = sequence.images.length;
+    htmlFrameCount.innerText = frameCount;
+    displayRawImage(firstImage, container);      
+    let imageIndex = 0;
+    htmlFrameNumber.innerText = imageIndex + 1;
+  
+    function nextImage(delta) {
+      imageIndex = (imageIndex + delta + frameCount) % frameCount;
+      htmlFrameNumber.innerText = imageIndex + 1;
+      const nextImage = sequence.images[imageIndex];
+      displayRawImage(nextImage, container);
+    }
+  
+    nextButton.onclick = () => nextImage(1);
+    
+    backButton.onclick = () => nextImage(-1);
+  
+    playButton.onclick = function () {
+      // TODO
+    }
+  
+  }
+
 }
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
   if (file) {
-    loadLocalFile(file, loadFile, console.log);
+    Isore.loadLocalFile(file, Isore.loadFile, console.log);
   }
 });
 
-function loadLocalFile(file, successCallback, errCallback) {
-  const reader = new FileReader();
-
-  // If success
-  reader.onload = function (event) {
-    const localFile = event.target.result; // ArrayBuffer
-    successCallback(localFile);
-  };
-
-  // If error
-  reader.onerror = function (error) {
-    console.error('Error reading file:', error);
-    errCallback();
-  };
-
-  // Execute!
-  reader.readAsArrayBuffer(file);
-}
 
 
-function loadFile(arrayBuffer) {
-  // Create IsoFile object
-  g_isofile = new IsoFile(arrayBuffer);
-
-  // Display Box Tree
-  const tree = document.getElementById('box-tree');
-  const boxTreeDump = document.getElementById('box-tree-dump');
-  const mdatCanvas = document.getElementById('mdat-canvas');
-  const mdatText = document.getElementById('mdat-text');
-
-  // Create Callback
-  const callback = createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
-
-  Gui.displayBoxTree(g_isofile, tree, callback);
-
-}
-
-
-function createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
-  const boxTreeListener = function (box) {
-    // Display Box
-    Gui.displayBox(box, boxTreeDump);
-
-    // Handle Box Data (if any)
-    const data = g_isofile.getBoxData(box);
-    if (!data) {
-      // Do Nothing
-    } else if (typeof data === 'string') {
-      Gui.displayText(data, mdatText);
-      Gui.hideContainer(mdatCanvas);
-    } else if (data instanceof RawImage) {
-      displayRawImage(data, mdatCanvas);
-      Gui.hideContainer(mdatText);
-    } else if (data instanceof ImageSequence) {
-      displayImageSequence(data, mdatCanvas);
-    }
-  }
-  return boxTreeListener;
-}
-
-function displayImageSequence(sequence, container) {
-  ImageSequence.must_be(sequence);
-
-  const firstImage = sequence.images[0];
-  const frameCount = sequence.images.length;
-  htmlFrameCount.innerText = frameCount;
-  displayRawImage(firstImage, container);      
-  let imageIndex = 0;
-  htmlFrameNumber.innerText = imageIndex + 1;
-
-  function nextImage(delta) {
-    imageIndex = (imageIndex + delta + frameCount) % frameCount;
-    htmlFrameNumber.innerText = imageIndex + 1;
-    const nextImage = sequence.images[imageIndex];
-    displayRawImage(nextImage, container);
-  }
-
-  nextButton.onclick = () => nextImage(1);
-  
-  backButton.onclick = () => nextImage(-1);
-
-  playButton.onclick = function () {
-    // TODO
-  }
-
-}
 
 function displayRawImage(image, container) {
   RawImage.must_be(image);

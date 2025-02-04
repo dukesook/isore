@@ -16,6 +16,8 @@ const htmlNextButton = document.getElementById('next-button');
 const htmlBackButton = document.getElementById('back-button');
 const htmlFrameNumber = document.getElementById('current-frame-number');
 const htmlFrameCount = document.getElementById('frame-count');
+const htmlImageWidth = document.getElementById('image-width');
+const htmlImageHeight = document.getElementById('image-height');
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
@@ -75,7 +77,7 @@ function createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
       Gui.displayText(data, mdatText);
       Gui.hideContainer(mdatCanvas);
     } else if (data instanceof RawImage) {
-      Gui.displayRawImage(data, mdatCanvas);
+      displayRawImage(data, mdatCanvas);
       Gui.hideContainer(mdatText);
     } else if (data instanceof ImageSequence) {
       displayImageSequence(data, mdatCanvas);
@@ -90,23 +92,31 @@ function displayImageSequence(sequence, container) {
   const firstImage = sequence.images[0];
   const frameCount = sequence.images.length;
   htmlFrameCount.innerText = frameCount;
-  Gui.displayRawImage(firstImage, container);      
+  displayRawImage(firstImage, container);      
   let imageIndex = 0;
+  htmlFrameNumber.innerText = imageIndex + 1;
 
   htmlNextButton.onclick = function () {
     imageIndex = (imageIndex + 1) % frameCount;
-    htmlFrameNumber.innerText = imageIndex;
+    htmlFrameNumber.innerText = imageIndex + 1;
     const nextImage = sequence.images[imageIndex];
-    Gui.displayRawImage(nextImage, container);
+    displayRawImage(nextImage, container);
   }
   
   htmlBackButton.onclick = function () {
     imageIndex = (imageIndex - 1 + frameCount) % frameCount;
-    htmlFrameNumber.innerText = imageIndex;
+    htmlFrameNumber.innerText = imageIndex + 1;
     const nextImage = sequence.images[imageIndex];
-    Gui.displayRawImage(nextImage, container);
+    displayRawImage(nextImage, container);
   }
 
+}
+
+function displayRawImage(image, container) {
+  RawImage.must_be(image);
+  htmlImageWidth.innerText = image.width;
+  htmlImageHeight.innerText = image.height;
+  Gui.displayRawImage(image, container);
 }
 
 

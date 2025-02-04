@@ -14,6 +14,8 @@ let g_isofile = null
 const fileInput = document.getElementById('file-input');
 const nextButton = document.getElementById('next-button');
 const backButton = document.getElementById('back-button');
+const currentFrameNumber = document.getElementById('current-frame-number');
+const frameCount = document.getElementById('frame-count');
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
@@ -86,18 +88,21 @@ function displayImageSequence(sequence, container) {
   ImageSequence.must_be(sequence);
 
   const firstImage = sequence.images[0];
-  const frameCount = sequence.images.length;
+  const frameCount2 = sequence.images.length;
+  frameCount.innerText = frameCount2;
   Gui.displayRawImage(firstImage, container);      
   let imageIndex = 0;
 
   nextButton.onclick = function () {
-    imageIndex = (imageIndex + 1) % frameCount;
+    imageIndex = (imageIndex + 1) % frameCount2;
+    currentFrameNumber.innerText = imageIndex;
     const nextImage = sequence.images[imageIndex];
     Gui.displayRawImage(nextImage, container);
   }
-
+  
   backButton.onclick = function () {
-    imageIndex = (imageIndex - 1 + frameCount) % frameCount;
+    imageIndex = (imageIndex - 1 + frameCount2) % frameCount2;
+    currentFrameNumber.innerText = imageIndex;
     const nextImage = sequence.images[imageIndex];
     Gui.displayRawImage(nextImage, container);
   }

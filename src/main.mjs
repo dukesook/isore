@@ -5,8 +5,6 @@ import RawImage from '/src/RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 
 
-
-
 // File Variables
 let g_isofile = null
 
@@ -20,6 +18,10 @@ const htmlFrameNumber = document.getElementById('current-frame-number');
 const htmlFrameCount = document.getElementById('frame-count');
 const htmlImageWidth = document.getElementById('image-width');
 const htmlImageHeight = document.getElementById('image-height');
+
+export const Isore = {
+
+}
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
@@ -109,6 +111,9 @@ function displayImageSequence(sequence, container) {
   
   backButton.onclick = () => nextImage(-1);
 
+  playButton.onclick = function () {
+    // TODO
+  }
 
 }
 
@@ -122,3 +127,7 @@ function displayRawImage(image, container) {
 
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM fully loaded and parsed');
+
+});

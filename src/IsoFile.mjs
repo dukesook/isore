@@ -105,7 +105,6 @@ export class IsoFile {
 
     for (let i = 0; i < trak.samples.length; i++) {
       const sample = trak.samples[i];
-      console.log('sample: ', sample);
       const offset = sample.offset;
       const sampleSize = sample.size;
       const sampleData = raw.slice(offset, offset + sampleSize);

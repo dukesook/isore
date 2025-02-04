@@ -101,8 +101,7 @@ export class IsoFile {
 
     const imageSequence = new ImageSequence();
 
-    console.log(trak);
-    console.log('sample1: ', trak.samples[0]);
+    const {width, height} = IsoFile.getTrackWidthHeight(trak);
 
     for (let i = 0; i < trak.samples.length; i++) {
       const sample = trak.samples[i];
@@ -110,14 +109,20 @@ export class IsoFile {
       const offset = sample.offset;
       const sampleSize = sample.size;
       const sampleData = raw.slice(offset, offset + sampleSize);
-      const rawImage = new RawImage(sampleData, 1024, 1024);
+      const rawImage = new RawImage(sampleData, width, height);
       imageSequence.addImage(rawImage);
     }
 
     return imageSequence;
-      
 
+  }
 
+  static getTrackWidthHeight(trak) {
+    Box.must_be(trak, 'trak');
+    const tkhd = trak.get_child('tkhd');
+    let width = tkhd.width >> 16;
+    let height = tkhd.height >> 16;
+    return { width, height };
   }
 
   /**

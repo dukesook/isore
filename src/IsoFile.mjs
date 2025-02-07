@@ -4,6 +4,8 @@ import { RawImage } from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import BoxDecoder from './BoxDecoder.mjs';
 import Box from './Box.mjs';
+import libheif from './libs/LibHeif.mjs';
+import { printDimensions } from './libs/LibHeif.mjs';
 
 /**
  * This class is a wrapper around the MP4Box output.
@@ -42,6 +44,11 @@ export class IsoFile {
     }
     this.raw = rawIn;
     this.boxes = Parser.parseIsoFile(rawIn);
+    this.debugLibheif(rawIn);
+  }
+
+  debugLibheif(arrayBufer) {
+    printDimensions(arrayBufer);  
   }
 
   /**

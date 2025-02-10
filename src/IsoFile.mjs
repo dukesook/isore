@@ -102,10 +102,7 @@ export class IsoFile {
   }
 
   getTrackData(trak, raw) {
-    Box.must_be(trak);
-    if (trak.fourcc != 'trak') {
-      return null;
-    }
+    Box.must_be(trak, 'trak');
 
     const imageSequence = new ImageSequence();
 

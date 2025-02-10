@@ -1,12 +1,12 @@
 import Box from './Box.mjs';
 import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 import RawImage from './RawImage.mjs';
-import ImageGrid from './ImageGrid.mjs';
+// import ImageGrid from './ImageGrid.mjs';
 
 export const BoxDecoder = {
 
-  decode_unci(unci, raw) {
-    Box.must_be(unci);
+  decode_item_unci(unci, raw) {
+    Box.must_be(unci, 'infe');
     let ispe = null;
     let uncC = null;
     let cmpd = null;
@@ -58,7 +58,7 @@ export const BoxDecoder = {
       return prettyXML;
     }
     else if (box.item_type == "unci") {
-      const rawImage = BoxDecoder.decode_unci(box, raw);
+      const rawImage = BoxDecoder.decode_item_unci(box, raw);
       return rawImage;
     }
     else if (box.item_type == "grid") {

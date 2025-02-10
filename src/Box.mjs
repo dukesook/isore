@@ -25,7 +25,7 @@ class Box {
   }
 
   static getItemPropertyAssociations(ipma, id) {
-    Box.must_be(ipma);
+    Box.must_be(ipma, 'ipma');
     const associations = ipma.associations;
   
     for (const association of associations) {
@@ -39,7 +39,7 @@ class Box {
   
 
   static getItemProperties(item) {
-    Box.must_be(item);
+    Box.must_be(item, 'infe');
     const properties = [];
     const id = item.item_ID;
 

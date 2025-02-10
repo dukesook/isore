@@ -2,7 +2,7 @@ import IsoFile from './IsoFile.mjs';
 import Gui from './IsoreGui.mjs';
 import RawImage from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
-
+import BoxDecoder from './BoxDecoder.mjs';
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
@@ -60,18 +60,28 @@ export const Isore = {
       Gui.displayBox(box, boxTreeDump);
   
       // Handle Box Data (if any)
-      const data = Isore.isofile.getBoxData(box);
-      if (!data) {
-        // Do Nothing
-      } else if (typeof data === 'string') {
-        Gui.displayText(data, mdatText);
-        Gui.hideContainer(mdatCanvas);
-      } else if (data instanceof RawImage) {
-        Isore.displayRawImage(data, mdatCanvas);
-        Gui.hideContainer(mdatText);
-      } else if (data instanceof ImageSequence) {
-        Isore.displayImageSequence(data, mdatCanvas);
+      const raw = Isore.isofile.getBoxData(box);
+      if (raw) {
+        // Decode
+        const data = BoxDecoder.decode(box, raw);
+
+        // Display
+        if (typeof data === 'string') {
+          Gui.displayText(data, mdatText);
+          Gui.hideContainer(mdatCanvas);
+        }
+        else if (data instanceof RawImage) {
+          Isore.displayRawImage(data, mdatCanvas);
+          Gui.hideContainer(mdatText);
+        }
+        else if (data instanceof ImageSequence) {
+          Isore.displayImageSequence(data, mdatCanvas);
+        }
+        else {
+          console.log('Unhandled data type:', data);
+        }
       }
+
     }
     return boxTreeListener;
   },

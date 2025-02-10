@@ -2,7 +2,6 @@ import { Parser } from './Parser.mjs';
 import { ImageGrid } from './ImageGrid.mjs';
 import { RawImage } from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
-import BoxDecoder from './BoxDecoder.mjs';
 import Box from './Box.mjs';
 import libheif from './libs/LibHeif.mjs';
 import { printDimensions } from './libs/LibHeif.mjs';
@@ -48,7 +47,7 @@ export class IsoFile {
   }
 
   debugLibheif(arrayBufer) {
-    printDimensions(arrayBufer);  
+    // printDimensions(arrayBufer);
   }
 
   /**
@@ -85,6 +84,7 @@ export class IsoFile {
   getBoxData(box) {
     Box.must_be(box);
     let boxData = null;
+
     if (box.fourcc == 'infe') {
       const iinf = box.parent;
       const meta = iinf.parent;
@@ -94,10 +94,11 @@ export class IsoFile {
     else if (box.fourcc == 'trak') {
       boxData = this.getTrackData(box, this.raw);
     }
+    else {
+      console.log('IsoFile::getBoxData - Unhandled box:', box);
+    }
 
-    const data = BoxDecoder.decode(box, boxData);
-    return data;
-
+    return boxData;
   }
 
   getTrackData(trak, raw) {

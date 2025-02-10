@@ -62,6 +62,9 @@ export const BoxDecoder = {
 
   decode(box, raw) {
     Box.must_be(box);
+    if (!(raw instanceof ArrayBuffer)) {
+      throw Error('Expected raw data to be an ArrayBuffer');
+    }
 
     if (box.fourcc == 'infe') {
       return BoxDecoder.decodeItem(box, raw);

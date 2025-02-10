@@ -10,9 +10,13 @@ class Box {
   parent = null;    // Box - Optional. Root Boxes don't have a parent
   item_ID = null;   // Number - Optional. For 'infe' boxes
 
-  static must_be(object) {
+  static must_be(object, type = null) {
     if (!(object instanceof Box)) {
       throw new Error('Expected a Box object but got: ' + typeof object);
+    }
+
+    if (type && object.fourcc != type) {
+      throw new Error('Expected a ' + type + ' box but got: ' + object.fourcc);
     }
   }
 

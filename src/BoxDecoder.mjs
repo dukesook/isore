@@ -1,7 +1,7 @@
 import Box from './Box.mjs';
 import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 import RawImage from './RawImage.mjs';
-// import ImageGrid from './ImageGrid.mjs';
+import ImageGrid from './ImageGrid.mjs';
 
 export const BoxDecoder = {
 
@@ -39,7 +39,7 @@ export const BoxDecoder = {
     return rawImage;
   },
 
-  decode_grid(grid, raw) {
+  decode_item_grid(grid, raw) {
     Box.must_be(grid, 'infe');
     const imageGrid = new ImageGrid(raw);
     return imageGrid;
@@ -51,24 +51,24 @@ export const BoxDecoder = {
       throw Error('Expected infe box but got: ' + box.fourcc);
     }
 
-
+    let data = null;
     if (box.item_type == 'mime') {
       const rawString = new TextDecoder().decode(raw);
       const prettyXML = xmlFormatter(rawString);
-      return prettyXML;
+      data = prettyXML;
     }
     else if (box.item_type == "unci") {
       const rawImage = BoxDecoder.decode_item_unci(box, raw);
-      return rawImage;
+      data = rawImage;
     }
     else if (box.item_type == "grid") {
-      return "TODO: display grid";
+      data = BoxDecoder.decode_item_grid(box, raw);
     }
     else {
       return "TODO: display item of type: " + box.item_type;
     }
 
-    
+    return data;
   },
 
   decode(box, raw) {

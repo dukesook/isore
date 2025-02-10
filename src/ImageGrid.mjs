@@ -86,3 +86,5 @@ export class ImageGrid {
     };
   }
 }
+
+export default ImageGrid;

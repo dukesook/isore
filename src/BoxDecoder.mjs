@@ -39,9 +39,34 @@ export const BoxDecoder = {
     return rawImage;
   },
 
-  decode_item_grid(grid, raw) {
+  get_item_references(grid) {
     Box.must_be(grid, 'infe');
+    let references = [];
+    const id = grid.item_ID;
+    const iinf = grid.parent;
+    const meta = iinf.parent;
+    const iref = meta.get_child('iref');
+    const allReferences = iref.references;
+    for (const reference of allReferences) {
+      const type = reference.type; // 'thmb', 'auxl', 'dimg', 'base'
+      const from_id = reference.from_item_ID;
+      const to_ids = reference.references;
+      console.log('to_ids:', to_ids);
+      const simplifiedList = to_ids.map(item => item.to_item_ID);
+
+      if (item.item_ID == from_id) {
+
+      }
+    }
+  
+  },
+
+  decode_grid_item(grid, raw) {
+    Box.must_be(grid, 'infe');
+    
+    const references = BoxDecoder.get_item_references(grid);
     const imageGrid = new ImageGrid(raw);
+
     return imageGrid;
   },
 
@@ -62,7 +87,7 @@ export const BoxDecoder = {
       data = rawImage;
     }
     else if (box.item_type == "grid") {
-      data = BoxDecoder.decode_item_grid(box, raw);
+      data = BoxDecoder.decode_grid_item(box, raw);
     }
     else {
       return "TODO: display item of type: " + box.item_type;

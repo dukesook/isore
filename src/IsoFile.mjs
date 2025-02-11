@@ -3,7 +3,6 @@ import { ImageGrid } from './ImageGrid.mjs';
 import { RawImage } from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import Box from './Box.mjs';
-import libheif from './libs/LibHeif.mjs';
 import { printDimensions } from './libs/LibHeif.mjs';
 
 /**

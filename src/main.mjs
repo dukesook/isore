@@ -3,6 +3,7 @@ import Gui from './IsoreGui.mjs';
 import RawImage from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import BoxDecoder from './BoxDecoder.mjs';
+import ImageGrid from './ImageGrid.mjs';
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
@@ -76,6 +77,10 @@ export const Isore = {
         }
         else if (data instanceof ImageSequence) {
           Isore.displayImageSequence(data, mdatCanvas);
+        }
+        else if (data instanceof ImageGrid) {
+          console.log('ImageGrid:', data);
+          const references = Isore.isofile.getItemReferences(box);
         }
         else {
           console.log('Unhandled data type:', data);

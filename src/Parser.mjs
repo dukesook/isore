@@ -46,6 +46,7 @@ function toBoxArray(mp4boxfile) {
   return boxes;
 }
 
+// Convert MP4Box objects to an intuitive Format
 function toBox(mp4box_object, parent = null) {
   let new_box = new Box();
   new_box.parent = parent;

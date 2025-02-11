@@ -264,18 +264,6 @@ export const Gui = {
 
 
   /**
-   * @param {*} buffer 
-   * @returns {String}
-   */
-  arrayBufferToHex(buffer) {
-    const bytes = new Uint8Array(buffer);
-    return Array.from(bytes)
-      .map(byte => byte.toString(16).padStart(2, '0')) // Convert each byte to hex
-      .join(' '); // Join bytes with spaces
-  },
-
-
-  /**
    * 
    * @param {Box} box 
    * @param {*} tree 

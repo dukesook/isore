@@ -312,7 +312,7 @@ export const Gui = {
 
 
   displayBoxTree(isoFile, tree, onclickBox) {
-    IsoFile.must_be(isoFile);
+    Utility.must_be(isoFile, IsoFile);
     Utility.must_be(tree, HTMLElement);
     Utility.must_be_function(onclickBox);
 

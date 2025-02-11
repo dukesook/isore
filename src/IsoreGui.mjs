@@ -1,6 +1,8 @@
 import Box from './Box.mjs';
+import ImageGrid from './ImageGrid.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import RawImage from './RawImage.mjs';
+import Util from './Utility.mjs';
 
 export const Gui = {
   /**
@@ -203,7 +205,12 @@ export const Gui = {
   displayImageSequence(imageSequence, container) {
     ImageSequence.must_be(imageSequence);
     container.style.display = 'block';
-    
+  },
+
+  displayImageGrid(imageGrid, container) {
+    ImageGrid.must_be(imageGrid);
+    Util.must_be(container, HTMLElement);
+
   },
 
   /**

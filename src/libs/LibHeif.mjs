@@ -4,8 +4,28 @@ const libheif = LibheifFactory();
 const HeifDecoder = libheif.HeifDecoder;
 
 export function exploreLibheif(arrayBuffer) {
-    console.log('libheif:', libheif);
-    console.log('libheif:', libheif);   
+    
+    const version = libheif.heif_get_version();
+    console.log('version:', version);
+    
+    const ctx = libheif.heif_context_alloc();
+    console.log('heif_context:', ctx);
+
+    const heif_error = libheif.heif_context_read_from_memory(ctx, arrayBuffer);
+    console.log('heif_error:', heif_error);
+
+    const num = libheif.heif_context_get_number_of_top_level_images(ctx);
+    console.log('num:', num);
+
+    const ids = libheif.heif_js_context_get_list_of_top_level_image_IDs(ctx);
+    console.log('ids:', ids);
+
+    for (let i = 0; i < num; i++) {
+        const id = ids[i];
+        const handle = libheif.heif_js_context_get_image_handle(ctx, id);
+        console.log('handle:', handle);
+    }
+
 }
 
 export function printDimensions(arrayBuffer) {

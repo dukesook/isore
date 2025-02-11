@@ -2,6 +2,7 @@ import Box from './Box.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import RawImage from './RawImage.mjs';
+import Utility from './Utility.mjs';
 import Util from './Utility.mjs';
 
 export const Gui = {
@@ -192,6 +193,7 @@ export const Gui = {
 
   displayRawImage(rawImage, container) {
     RawImage.must_be(rawImage);
+    Utility.must_be(container, HTMLElement);
     container.style.display = 'block';
 
     // if html tag is canvas
@@ -204,6 +206,7 @@ export const Gui = {
 
   displayImageSequence(imageSequence, container) {
     ImageSequence.must_be(imageSequence);
+    Utility.must_be(container, HTMLElement);
     container.style.display = 'block';
   },
 
@@ -219,6 +222,8 @@ export const Gui = {
    * @param {*} container  HTML Element
    */
   displayBox(box, container) {
+    Box.must_be(box);
+    Utility.must_be(container, HTMLElement);
     
     // Clear Previous Content
     container.innerHTML = '';
@@ -242,10 +247,14 @@ export const Gui = {
   },
 
   hideContainer(container) {
+    Util.must_be(container, HTMLElement);
+
     container.style.display = 'none';
   },
 
   displayText(string, container) {
+    Util.must_be(container, String);
+    Util.must_be(container, HTMLElement);
     container.innerHTML = '';
     container.style.display = 'block';
     let pre = document.createElement('pre');
@@ -253,18 +262,6 @@ export const Gui = {
     pre.textContent = string;
   },
 
-  decodeItem(item, raw) {
-    // TODO: decodeItem doesn't belong in Gui
-    // Move it to a new file
-    const item_type = item.item_type;
-    if (item_type == 'mime') {
-      const rawString = new TextDecoder().decode(raw);
-      const prettyXML = xmlFormatter(rawString);
-      return prettyXML;
-    } else {
-      throw Error('Unknown item type: ' + item_type);
-    }
-  },
 
   /**
    * @param {*} buffer 

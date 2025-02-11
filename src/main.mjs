@@ -80,7 +80,6 @@ export const Isore = {
         }
         else if (data instanceof ImageGrid) {
           console.log('ImageGrid:', data);
-          const references = Isore.isofile.getItemReferences(box);
         }
         else {
           console.log('Unhandled data type:', data);

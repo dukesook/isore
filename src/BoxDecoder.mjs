@@ -39,25 +39,29 @@ export const BoxDecoder = {
     return rawImage;
   },
 
-  get_item_references(grid) {
+  get_item_references(grid, id = null) {
     Box.must_be(grid, 'infe');
     let references = [];
-    const id = grid.item_ID;
     const iinf = grid.parent;
     const meta = iinf.parent;
     const iref = meta.get_child('iref');
     for (const reference of iref.children) {
-      const from_id = reference.from_item_ID;
-      const to_ids = reference.to_ids;
+      if (!id || id == reference.to_item_ID) {
+        Box.must_be(reference);
+        references.push(reference);
+      }
     }
-
-  
+    return references;
   },
 
   decode_grid_item(grid, raw) {
     Box.must_be(grid, 'infe');
     
-    const references = BoxDecoder.get_item_references(grid);
+    const references = BoxDecoder.get_item_references(grid.item_ID);
+    let dimg = null;
+    for (const reference of references) {
+      
+    }
     const imageGrid = new ImageGrid(raw);
 
     return imageGrid;

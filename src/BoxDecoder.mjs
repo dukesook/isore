@@ -77,7 +77,7 @@ export const BoxDecoder = {
     Box.must_be(grid, 'infe');
     
     const dimg = BoxDecoder.extract_grid_dimg(grid);
-    console.log('dimg:', dimg);
+    Box.must_be(dimg, 'dimg');
     const imageGrid = new ImageGrid(raw);
 
     return imageGrid;

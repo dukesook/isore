@@ -14,10 +14,8 @@ export const Gui = {
    * @param {HTMLTableElement} itemsTable - The HTMLtable element where the items will be displayed.
    */
   displayItemsOnTable(items, itemsTable, eventListener = null) {
-    if (!itemsTable) {
-      console.error('itemsTable is null');
-      return;
-    }
+    Utility.must_be(items, Array);
+    Utility.must_be(itemsTable, HTMLElement);
 
     itemsTable.innerHTML = '';
 

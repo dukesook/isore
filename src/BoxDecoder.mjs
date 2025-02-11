@@ -46,18 +46,11 @@ export const BoxDecoder = {
     const iinf = grid.parent;
     const meta = iinf.parent;
     const iref = meta.get_child('iref');
-    const allReferences = iref.references;
-    for (const reference of allReferences) {
-      const type = reference.type; // 'thmb', 'auxl', 'dimg', 'base'
+    for (const reference of iref.children) {
       const from_id = reference.from_item_ID;
-      const to_ids = reference.references;
-      console.log('to_ids:', to_ids);
-      const simplifiedList = to_ids.map(item => item.to_item_ID);
-
-      if (item.item_ID == from_id) {
-
-      }
+      const to_ids = reference.to_ids;
     }
+
   
   },
 

@@ -51,22 +51,31 @@ function toBox(mp4box_object, parent = null) {
   let new_box = new Box();
   new_box.parent = parent;
 
+  if (mp4box_object.type == 'iref') {
+    console.log('mp4box_object:', mp4box_object);
+    // return irefToBox(mp4box_object, new_box);
+  }
+
   // Update values when names don't match
   Object.entries(mp4box_object).forEach(([key, value]) => {
-    if (key === 'hdr_size') {
-      new_box.hdr_size = value;
-    }
-    else if (key === 'type') {
+    if (key === 'type') {
       new_box.fourcc = value;
     }
     else if (key === 'data') {
       new_box.raw = value;
     }
-    else if (key === 'boxes' || key === "item_infos" || key === 'entries') {
+    else if ( key === 'boxes' ||
+              key === "item_infos" ||
+              key === 'entries' ||
+              key === 'references' && parent.fourcc == 'meta') {
+      // boxes, item_infos, entries, & references are children boxes
       value.forEach((mp4box_child) => {
         const child = toBox(mp4box_child, new_box);
         new_box.children.push(child);
       });
+    }
+    else if (key === 'references' && parent.fourcc == 'iref') {
+      new_box.to_ids = value.map(item => item.to_item_ID);
     }
     else {
       new_box[key] = value; // MP4Box & Box names match

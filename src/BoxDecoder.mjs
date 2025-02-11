@@ -54,14 +54,28 @@ export const BoxDecoder = {
     return references;
   },
 
-  decode_grid_item(grid, raw) {
+  extract_grid_dimg(grid) {
     Box.must_be(grid, 'infe');
-    
     const references = BoxDecoder.get_item_references(grid.item_ID);
     let dimg = null;
     for (const reference of references) {
-      
+      if (reference.fourcc == 'dimg') {
+        if (dimg) {
+          console.error('Warning: More than one dimg reference found for item:', grid.item_ID);
+        }
+        dimg = reference;
+      }
     }
+    if (!dimg) {
+      throw Error('Missing dimg reference for item: ' + grid.item_ID);
+    }
+    return dimg;
+  },
+
+  decode_grid_item(grid, raw) {
+    Box.must_be(grid, 'infe');
+    
+    const dimg = BoxDecoder.extract_grid_dimg(grid);
     const imageGrid = new ImageGrid(raw);
 
     return imageGrid;

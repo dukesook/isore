@@ -3,7 +3,7 @@ import { ImageGrid } from './ImageGrid.mjs';
 import { RawImage } from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import Box from './Box.mjs';
-import { printDimensions } from './libs/LibHeif.mjs';
+import { printDimensions, exploreLibheif } from './libs/LibHeif.mjs';
 
 /**
  * This class is a wrapper around the MP4Box output.
@@ -46,6 +46,7 @@ export class IsoFile {
   }
 
   debugLibheif(arrayBufer) {
+    exploreLibheif(arrayBufer);
     // printDimensions(arrayBufer);
   }
 

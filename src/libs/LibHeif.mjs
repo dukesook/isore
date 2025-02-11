@@ -3,6 +3,11 @@ import LibheifFactory from 'https://cdn.jsdelivr.net/npm/libheif-js@1.18.2/libhe
 const libheif = LibheifFactory();
 const HeifDecoder = libheif.HeifDecoder;
 
+export function exploreLibheif(arrayBuffer) {
+    console.log('libheif:', libheif);
+    console.log('libheif:', libheif);   
+}
+
 export function printDimensions(arrayBuffer) {
     const decoder = new HeifDecoder();
 

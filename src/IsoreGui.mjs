@@ -1,9 +1,9 @@
 import Box from './Box.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import ImageSequence from './ImageSequence.mjs';
+import IsoFile from './IsoFile.mjs';
 import RawImage from './RawImage.mjs';
 import Utility from './Utility.mjs';
-import Util from './Utility.mjs';
 
 export const Gui = {
   /**
@@ -212,7 +212,7 @@ export const Gui = {
 
   displayImageGrid(imageGrid, container) {
     ImageGrid.must_be(imageGrid);
-    Util.must_be(container, HTMLElement);
+    Utility.must_be(container, HTMLElement);
 
   },
 
@@ -247,14 +247,14 @@ export const Gui = {
   },
 
   hideContainer(container) {
-    Util.must_be(container, HTMLElement);
+    Utility.must_be(container, HTMLElement);
 
     container.style.display = 'none';
   },
 
   displayText(string, container) {
-    Util.must_be(container, String);
-    Util.must_be(container, HTMLElement);
+    Utility.must_be(container, String);
+    Utility.must_be(container, HTMLElement);
     container.innerHTML = '';
     container.style.display = 'block';
     let pre = document.createElement('pre');
@@ -312,12 +312,12 @@ export const Gui = {
     });
   },
 
-  /**
-   * @param {IsoFile} isoFile 
-   * @param {HTMLElement} tree
-   * @param 
-   */
+
   displayBoxTree(isoFile, tree, onclickBox) {
+    IsoFile.must_be(isoFile);
+    Utility.must_be(tree, HTMLElement);
+    Utility.must_be_function(onclickBox);
+
     // Clear Previous Content
     tree.innerHTML = '';
     

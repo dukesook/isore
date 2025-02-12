@@ -1,0 +1,47 @@
+import Box from './Box.mjs';
+import IsoFile from './IsoFile.mjs';
+import Utility from './Utility.mjs';
+import RawImage from './RawImage.mjs';
+
+export default class BoxDecoder {
+
+  static decode_item_unci(isoFile, unci) {
+    Box.must_be(unci, 'infe');
+    Utility.must_be(isoFile, IsoFile);
+
+    let ispe = null;
+    let uncC = null;
+    let cmpd = null;
+
+    const properties = Box.getItemProperties(unci);
+    for (const property of properties) {
+      if (property.fourcc == 'ispe') {
+        ispe = property;
+      } else if (property.fourcc == 'uncC') {
+        uncC = property;
+      } else if (property.fourcc == 'cmpd') {
+        cmpd = property;
+      }
+    }
+
+    if (!ispe) {
+      throw Error('Missing ispe property');
+    } else if (!uncC) {
+      throw Error('Missing uncC property');
+    } else if (!cmpd) {
+      // Check if uncC version is 1
+    }
+
+    const width = ispe.image_width;
+    const height = ispe.image_height;
+
+
+    const pixels = new Uint8Array(raw);
+    const rawImage = new RawImage(pixels, width, height);
+    return rawImage;
+  }
+
+
+
+
+}

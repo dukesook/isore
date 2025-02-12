@@ -1,8 +1,4 @@
 import { Parser } from './Parser.mjs';
-import { ImageGrid } from './ImageGrid.mjs';
-import { RawImage } from './RawImage.mjs';
-import ImageSequence from './ImageSequence.mjs';
-import Box from './Box.mjs';
 import { printDimensions, exploreLibheif } from './libs/LibHeif.mjs';
 import Utility from './Utility.mjs';
 
@@ -23,65 +19,13 @@ export class IsoFile {
     // printDimensions(arrayBufer);
   }
 
-
-  getBoxData(box) {
-    Box.must_be(box);
-    let boxData = null;
-
-    if (box.fourcc == 'infe') {
-      const iinf = box.parent;
-      const meta = iinf.parent;
-      const id = box.item_ID;
-      boxData = getItemDataIloc(this, id, meta);
-    }
-    else if (box.fourcc == 'trak') {
-      boxData = this.getTrackData(box, this.raw);
-    }
-    else {
-      console.log('IsoFile::getBoxData - Unhandled box:', box);
-    }
-
-    return boxData;
-  }
-
-  getTrackData(trak, raw) {
-    Box.must_be(trak, 'trak');
-
-    const imageSequence = new ImageSequence();
-
-    const {width, height} = IsoFile.getTrackWidthHeight(trak);
-
-    for (let i = 0; i < trak.samples.length; i++) {
-      const sample = trak.samples[i];
-      const offset = sample.offset;
-      const sampleSize = sample.size;
-      const sampleData = raw.slice(offset, offset + sampleSize);
-      const rawImage = new RawImage(sampleData, width, height);
-      imageSequence.addImage(rawImage);
-    }
-
-    return imageSequence;
-
-  }
-
-  static getTrackWidthHeight(trak) {
-    Box.must_be(trak, 'trak');
-    const tkhd = trak.get_child('tkhd');
-    let width = tkhd.width >> 16;
-    let height = tkhd.height >> 16;
-    return { width, height };
-  }
-
 }
 
-/**
- *  Use the iloc (Items Location Box) to retrieve the item data. Usually in mdat or idat.
- * @param {IsoFile} isoFile
- * @param {Number} id
- * @returns {ArrayBuffer} - The raw data for the item.
- *                          Returns null if the item is not found or the data is out of bounds.
- */
-function getItemDataIloc(isoFile, id, meta) {
+export default IsoFile;
+
+// DEPRECATED
+function getItemDataIloc_OLD(isoFile, id, meta) {
+
   const rawFile = isoFile.raw;
 
   // Find Item
@@ -116,5 +60,3 @@ function getItemDataIloc(isoFile, id, meta) {
   const itemData = buffer.slice(offset, end);
   return itemData;
 }
-
-export default IsoFile;

@@ -4,41 +4,142 @@ import RawImage from './RawImage.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import Utility from './Utility.mjs';
 import IsoFile from './IsoFile.mjs';
+import BoxDecoder from './BoxDecoder.mjs';
 
 export default class BoxHandler {
 
-  static decode_item_unci(unci, raw) {
-    Box.must_be(unci, 'infe');
-    let ispe = null;
-    let uncC = null;
-    let cmpd = null;
+  static getBoxData(isoFile, box) {
+    Box.must_be(box);
+    Utility.must_be(isoFile, IsoFile);
 
-    const properties = Box.getItemProperties(unci);
-    for (const property of properties) {
-      if (property.fourcc == 'ispe') {
-        ispe = property;
-      } else if (property.fourcc == 'uncC') {
-        uncC = property;
-      } else if (property.fourcc == 'cmpd') {
-        cmpd = property;
-      }
+    const fourcc = box.fourcc;
+    if (fourcc == 'infe') {
+      boxData = BoxHandler.decodeItem(box, raw);
+    }
+    else if (fourcc == 'trak') {
+      boxData = getTrackData(box, isoFile.raw);
+    }
+    else {
+      // console.log(box);
     }
 
-    if (!ispe) {
-      throw Error('Missing ispe property');
-    } else if (!uncC) {
-      throw Error('Missing uncC property');
-    } else if (!cmpd) {
-      // Check if uncC version is 1
+    return boxData;
+  }
+
+//********************************************************************** */
+
+
+  static decodeItem(box, isoFile) {
+    Box.must_be(box, 'infe');
+    Utility.must_be(isoFile, IsoFile);
+
+    const raw = BoxHandler.getItemDataRaw(isoFile, box);
+
+    let decodedItem = null;
+    if (box.item_type == 'mime') {
+      const rawString = new TextDecoder().decode(raw);
+      const prettyXML = xmlFormatter(rawString);
+      decodedItem = prettyXML;
+    }
+    else if (box.item_type == "unci") {
+      decodedItem = BoxDecoder.decode_item_unci(isoFile, box);
+      RawImage.must_be(decodedItem);
+    }
+    else if (box.item_type == "grid") {
+      decodedItem = BoxHandler.decode_grid_item(box, raw);
+    }
+    else {
+      return "TODO: display item of type: " + box.item_type;
     }
 
-    const width = ispe.image_width;
-    const height = ispe.image_height;
+    return decodedItem;
+  }
+
+  static decodeTrack(box, isoFile) {
+    Box.must_be(box, 'trak');
+    Utility.must_be(isoFile, IsoFile);
+    throw Error('Not implemented yet');
+  }
 
 
-    const pixels = new Uint8Array(raw);
-    const rawImage = new RawImage(pixels, width, height);
-    return rawImage;
+
+  static getItemDataRaw(isoFile, box) {
+    Utility.must_be(isoFile, IsoFile);
+    Box.must_be(box, 'infe');
+
+    let raw = null;
+    const iinf = box.parent;
+    const meta = iinf.parent;
+    const iloc = meta.get_child('iloc');
+
+    // Find Item
+    const itemLocation = iloc.items.find((item) => item.item_ID == box.item_ID);
+    if (!itemLocation) {
+      return null;
+    }
+    if (itemLocation.extents.length != 1) {
+      throw Error('iloc item ' + id + ' has ' + extents.length + ' extents. Only one extent is supported');
+    }
+
+    const extent = itemLocation.extents[0];
+    const length = extent.extent_length;
+    const offset = itemLocation.base_offset + extent.extent_offset;
+    const end = offset + length;
+    const construction_method = itemLocation.construction_method;
+    
+    if (end > isoFile.raw.byteLength) {
+      throw Error('Item extends beyond the end of the file');
+    }
+
+    // Construction Method
+    let buffer = null;
+    if (construction_method == 0) {
+      buffer = isoFile.raw; // Base Offset = file (absolute offset)
+    } else if (construction_method == 1) {
+      // buffer = meta.idat.data.buffer; // Base Offset = idat
+      const idat = meta.get(child('idat'));
+      buffer = idat.data.buffer;
+    } else {
+      throw Error('Unsupported construction method: ' + construction_method);
+    }
+
+    // Extract Data
+    const itemData = buffer.slice(offset, end);
+    return itemData;
+
+  }
+
+//********************************************************************** */
+
+
+
+
+
+
+// GRID ITEM //
+//********************************************************************** */
+  static decode_grid_item(grid, raw) {
+    Box.must_be(grid, 'infe');
+    
+    const dimg = BoxHandler.extract_grid_dimg(grid);
+    Box.must_be(dimg, 'dimg');
+    const imageGrid = new ImageGrid(raw);
+
+    to_ids = dimg.to_item_IDs;
+    const iinf = grid.parent;
+    const meta = iinf.parent;
+    for (const id of to_ids) {
+      const item = null;
+      // TODO: Get item box given an id;
+
+
+      Box.must_be(item, 'infe');
+      const rawImage = BoxHandler.decodeItem(item, raw);
+      Utility.must_be(rawImage, RawImage);
+
+    }
+
+    return imageGrid;
   }
 
   static get_item_references(grid) {
@@ -75,71 +176,43 @@ export default class BoxHandler {
     return dimg;
   }
 
-  static decode_grid_item(grid, raw) {
-    Box.must_be(grid, 'infe');
-    
-    const dimg = BoxHandler.extract_grid_dimg(grid);
-    Box.must_be(dimg, 'dimg');
-    const imageGrid = new ImageGrid(raw);
-
-    to_ids = dimg.to_item_IDs;
-    const iinf = grid.parent;
-    const meta = iinf.parent;
-    for (const id of to_ids) {
-      const item = null;
-      // TODO: Get item box given an id;
+  //********************************************************************** */
+  // GRID ITEM //
 
 
-      Box.must_be(item, 'infe');
-      const rawImage = BoxHandler.decodeItem(item, raw);
-      Utility.must_be(rawImage, RawImage);
-
-    }
 
 
-    return imageGrid;
+
+
+
+} // class BoxHandler
+
+
+function getTrackData(trak, raw) {
+  Box.must_be(trak, 'trak');
+
+  const imageSequence = new ImageSequence();
+
+  const {width, height} = IsoFile.getTrackWidthHeight(trak);
+
+  for (let i = 0; i < trak.samples.length; i++) {
+    const sample = trak.samples[i];
+    const offset = sample.offset;
+    const sampleSize = sample.size;
+    const sampleData = raw.slice(offset, offset + sampleSize);
+    const rawImage = new RawImage(sampleData, width, height);
+    imageSequence.addImage(rawImage);
   }
 
-  static decodeItem(box, raw) {
-    Box.must_be(box, 'infe');
-    if (box.fourcc != 'infe') {
-      throw Error('Expected infe box but got: ' + box.fourcc);
-    }
+  return imageSequence;
 
-    let data = null;
-    if (box.item_type == 'mime') {
-      const rawString = new TextDecoder().decode(raw);
-      const prettyXML = xmlFormatter(rawString);
-      data = prettyXML;
-    }
-    else if (box.item_type == "unci") {
-      const rawImage = BoxHandler.decode_item_unci(box, raw);
-      data = rawImage;
-    }
-    else if (box.item_type == "grid") {
-      data = BoxHandler.decode_grid_item(box, raw);
-    }
-    else {
-      return "TODO: display item of type: " + box.item_type;
-    }
-
-    return data;
-  }
-
-  static getBoxData(isoFile, box) {
-    Box.must_be(box);
-    Utility.must_be(isoFile, IsoFile);
-    const raw = isoFile.getBoxData(box);
-
-
-    if (box.fourcc == 'infe') {
-      return BoxHandler.decodeItem(box, raw);
-    }
-    else if (box.fourcc == 'trak') {
-      return raw;
-    }
-    else {
-      // console.log(box);
-    }
-  }
 }
+
+function getTrackWidthHeight(trak) {
+  Box.must_be(trak, 'trak');
+  const tkhd = trak.get_child('tkhd');
+  let width = tkhd.width >> 16;
+  let height = tkhd.height >> 16;
+  return { width, height };
+}
+

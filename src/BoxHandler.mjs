@@ -53,13 +53,31 @@ export default class BoxHandler {
       decodedItem = BoxDecoder.decode_item_unci(box, raw);
     }
     else if (box.item_type == "grid") {
-      decodedItem = BoxHandler.decode_grid_item(box, raw);
+      decodedItem = BoxHandler.getGridItem(isoFile, box, raw);
     }
     else {
       return "TODO: display item of type: " + box.item_type;
     }
 
     return decodedItem;
+  }
+
+  static getGridItem(isoFile, box, raw) {
+    Utility.must_be(isoFile, IsoFile);
+    Box.must_be(box, 'infe');
+    Utility.must_be(raw, ArrayBuffer);  // Grid data from mdat/idat
+  
+    const imageGrid = new ImageGrid(raw);
+    
+    // Get to_ids
+    const references = BoxHandler.get_item_references(box);
+    const dimg = BoxHandler.get_grid_dimg(references);
+    const to_ids = dimg.to_ids;
+
+    // Populate imageGrid with images
+    
+
+    return imageGrid;
   }
 
   static decodeTrack(box, isoFile) {
@@ -76,7 +94,6 @@ export default class BoxHandler {
     Utility.must_be(isoFile, IsoFile);
     Box.must_be(box, 'infe');
 
-    let raw = null;
     const iinf = box.parent;
     const meta = iinf.parent;
     const iloc = meta.get_child('iloc');
@@ -106,70 +123,25 @@ export default class BoxHandler {
       buffer = isoFile.raw; // Base Offset = file (absolute offset)
     } else if (construction_method == 1) {
       // buffer = meta.idat.data.buffer; // Base Offset = idat
-      const idat = meta.get(child('idat'));
-      buffer = idat.data.buffer;
+      const idat = meta.get_child('idat');
+      buffer = idat.raw;
     } else {
       throw Error('Unsupported construction method: ' + construction_method);
     }
 
     // Extract Data
     const itemData = buffer.slice(offset, end);
+    console.log('itemData:', itemData);
+    console.log('type of itemData:', typeof itemData);
     return itemData;
 
   }
 
-//********************************************************************** */
 
+  static get_grid_dimg(references) {
+    Utility.must_be(references, Array);
 
-
-
-
-
-// GRID ITEM //
-//********************************************************************** */
-  static decode_grid_item(grid, raw) {
-    Box.must_be(grid, 'infe');
-    
-    const dimg = BoxHandler.extract_grid_dimg(grid);
-    Box.must_be(dimg, 'dimg');
-    const imageGrid = new ImageGrid(raw);
-
-    to_ids = dimg.to_item_IDs;
-    const iinf = grid.parent;
-    const meta = iinf.parent;
-    for (const id of to_ids) {
-      const item = null;
-      // TODO: Get item box given an id;
-
-
-      Box.must_be(item, 'infe');
-      const rawImage = BoxHandler.getItemData(item, raw);
-      Utility.must_be(rawImage, RawImage);
-
-    }
-
-    return imageGrid;
-  }
-
-  static get_item_references(grid) {
-    Box.must_be(grid, 'infe');
-    let references = [];
-    const id = grid.item_ID;
-    const iinf = grid.parent;
-    const meta = iinf.parent;
-    const iref = meta.get_child('iref');
-    for (const reference of iref.children) {
-      if (id == reference.from_item_ID) {
-        Box.must_be(reference);
-        references.push(reference);
-      }
-    }
-    return references;
-  }
-
-  static extract_grid_dimg(grid) {
-    Box.must_be(grid, 'infe');
-    const references = BoxHandler.get_item_references(grid);
+    // const references = BoxDecoder.get_item_references(grid);
     let dimg = null;
     for (const reference of references) {
       if (reference.fourcc == 'dimg') {
@@ -185,14 +157,26 @@ export default class BoxHandler {
     return dimg;
   }
 
-  //********************************************************************** */
-  // GRID ITEM //
 
-
-
-
-
-
+/**
+ * 
+ * @returns  {Array} Array of references to the item
+ */
+  static get_item_references(item) {
+    Box.must_be(item, 'infe');
+    let references = [];
+    const id = item.item_ID;
+    const iinf = item.parent;
+    const meta = iinf.parent;
+    const iref = meta.get_child('iref');
+    for (const reference of iref.children) {
+      if (id == reference.from_item_ID) {
+        Box.must_be(reference);
+        references.push(reference);
+      }
+    }
+    return references;
+  }
 
 } // class BoxHandler
 

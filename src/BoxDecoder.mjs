@@ -2,6 +2,7 @@ import Box from './Box.mjs';
 import Utility from './Utility.mjs';
 import RawImage from './RawImage.mjs';
 import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
+import ImageGrid from './ImageGrid.mjs';
 
 // SRP: The BoxDecoder only decodes. It doesn't parse or traverse
 // import IsoFile from './IsoFile.mjs';

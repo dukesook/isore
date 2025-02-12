@@ -51,8 +51,17 @@ function toBox(mp4box_object, parent = null) {
   let new_box = new Box();
   new_box.parent = parent;
 
+  if (mp4box_object.type == 'idat') {
+    // console.log('idat:', mp4box_object);
+  }
+
   // Update values when names don't match
   Object.entries(mp4box_object).forEach(([key, value]) => {
+
+    if (value instanceof Uint8Array) {
+      value = value.buffer; // Convert to ArrayBuffer
+    }
+
     if (key === 'type') {
       new_box.fourcc = value;
     }

@@ -69,7 +69,7 @@ export const Isore = {
       Gui.displayBox(box, boxTreeDump);
 
       
-      const data = BoxHandler.decode(Isore.isoFile, box);
+      const data = BoxHandler.getBoxData(Isore.isoFile, box);
       Isore.displayData(data, mdatCanvas, mdatText);
 
 

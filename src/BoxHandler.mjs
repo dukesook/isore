@@ -126,7 +126,7 @@ export default class BoxHandler {
     return data;
   }
 
-  static decode(isoFile, box) {
+  static getBoxData(isoFile, box) {
     Box.must_be(box);
     Utility.must_be(isoFile, IsoFile);
     const raw = isoFile.getBoxData(box);

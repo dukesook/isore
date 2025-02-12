@@ -4,6 +4,7 @@ import ImageGrid from './ImageGrid.mjs';
 import Utility from './Utility.mjs';
 import IsoFile from './IsoFile.mjs';
 import BoxDecoder from './BoxDecoder.mjs';
+import ImageSequence from './ImageSequence.mjs';
 
 export default class BoxHandler {
 
@@ -21,7 +22,7 @@ export default class BoxHandler {
       boxData = BoxHandler.getItemData(isoFile, box);
     }
     else if (fourcc == 'trak') {
-      boxData = getTrackData(box, isoFile.raw);
+      boxData = getTrackData(isoFile, box);
     }
     else {
       return null;
@@ -29,8 +30,6 @@ export default class BoxHandler {
 
     return boxData;
   }
-
-//********************************************************************** */
 
 
   static getItemData(isoFile, box) {
@@ -62,6 +61,7 @@ export default class BoxHandler {
     return decodedItem;
   }
 
+
   static getGridItem(isoFile, box, raw) {
     Utility.must_be(isoFile, IsoFile);
     Box.must_be(box, 'infe');
@@ -85,6 +85,7 @@ export default class BoxHandler {
 
     return imageGrid;
   }
+
 
   static decodeTrack(box, isoFile) {
     Box.must_be(box, 'trak');
@@ -202,12 +203,15 @@ export default class BoxHandler {
 } // class BoxHandler
 
 
-function getTrackData(trak, raw) {
+function getTrackData(isoFile, trak) {
   Box.must_be(trak, 'trak');
+  Utility.must_be(isoFile, IsoFile);
 
+  // TODO - verify that this track is indeed an image sequence
   const imageSequence = new ImageSequence();
+  const raw = isoFile.raw;
 
-  const {width, height} = IsoFile.getTrackWidthHeight(trak);
+  const {width, height} = getTrackWidthHeight(trak);
 
   for (let i = 0; i < trak.samples.length; i++) {
     const sample = trak.samples[i];

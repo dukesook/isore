@@ -15,7 +15,7 @@ export class IsoFile {
   }
 
   debugLibheif(arrayBufer) {
-    exploreLibheif(arrayBufer);
+    // exploreLibheif(arrayBufer);
     // printDimensions(arrayBufer);
   }
 

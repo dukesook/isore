@@ -75,7 +75,11 @@ export default class BoxHandler {
     const to_ids = dimg.to_ids;
 
     // Populate imageGrid with images
-    
+    const iinf = box.parent;
+    const meta = iinf.parent;
+    for (const id of to_ids) {
+      box = BoxHandler.getItemById(meta, id);
+    }    
 
     return imageGrid;
   }
@@ -84,6 +88,21 @@ export default class BoxHandler {
     Box.must_be(box, 'trak');
     Utility.must_be(isoFile, IsoFile);
     throw Error('Not implemented yet');
+  }
+
+
+  static getItemById(meta, id) {
+    Box.must_be(meta, 'meta');
+    Utility.must_be(id, Number);
+
+    const iinf = meta.get_child('iinf');
+    const items = iinf.children;
+    const item = items.find((item) => item.item_ID == id);
+    if (!item) {
+      throw Error('Item not found: ' + id);
+    }
+    Box.must_be(item, 'infe');
+    return item;
   }
 
 

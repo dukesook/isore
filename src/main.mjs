@@ -4,6 +4,7 @@ import RawImage from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import BoxHandler from './BoxHandler.mjs';
 import ImageGrid from './ImageGrid.mjs';
+import Utility from './Utility.mjs';
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
@@ -59,35 +60,41 @@ export const Isore = {
     const boxTreeListener = function (box) {
       // Display Box
       Gui.displayBox(box, boxTreeDump);
-  
-      // Handle Box Data (if any)
-      const raw = Isore.isofile.getBoxData(box);
-      if (raw) {
-        // Decode
-        const data = BoxHandler.decode(box, raw);
 
-        // Display
-        if (typeof data === 'string') {
-          Gui.displayText(data, mdatText);
-          Gui.hideContainer(mdatCanvas);
-        }
-        else if (data instanceof RawImage) {
-          Isore.displayRawImage(data, mdatCanvas);
-          Gui.hideContainer(mdatText);
-        }
-        else if (data instanceof ImageSequence) {
-          Isore.displayImageSequence(data, mdatCanvas);
-        }
-        else if (data instanceof ImageGrid) {
-          Gui.displayImageGrid(data, mdatCanvas);
-        }
-        else {
-          console.log('Unhandled data type:', data);
-        }
-      }
+      
+      const data = BoxHandler.decode(box, raw);
+      Isore.displayData(data, mdatCanvas);
+      const raw = Isore.isofile.getBoxData(box);
+
 
     }
     return boxTreeListener;
+  },
+
+  displayData(data, container) {
+    Utility.must_be(container, HTMLElement);
+
+    // Display
+    if (!data) {
+      return;
+    } if (typeof data === 'string') {
+      Gui.displayText(data, mdatText);
+      Gui.hideContainer(container);
+    }
+    else if (data instanceof RawImage) {
+      Isore.displayRawImage(data, container);
+      Gui.hideContainer(mdatText);
+    }
+    else if (data instanceof ImageSequence) {
+      Isore.displayImageSequence(data, container);
+    }
+    else if (data instanceof ImageGrid) {
+      Gui.displayImageGrid(data, container);
+    }
+    else {
+      console.log('Unhandled data type:', data);
+    }
+    
   },
 
   displayImageSequence(sequence, container) {

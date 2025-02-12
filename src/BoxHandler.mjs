@@ -3,6 +3,7 @@ import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 import RawImage from './RawImage.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import Utility from './Utility.mjs';
+import IsoFile from './IsoFile.mjs';
 
 export default class BoxHandler {
 
@@ -125,9 +126,9 @@ export default class BoxHandler {
     return data;
   }
 
-  static decode(box, raw) {
+  static decode(box, isoFile) {
     Box.must_be(box);
-    Utility.must_be(raw, ArrayBuffer);
+    IsoFile.must_be(isoFile);
 
     if (box.fourcc == 'infe') {
       return BoxHandler.decodeItem(box, raw);

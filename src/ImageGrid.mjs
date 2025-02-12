@@ -10,7 +10,7 @@ export class ImageGrid {
   gridHeight = 0;
   tileWidth = 0;
   tileHeight = 0;
-  rawImages = [];
+  rawImages = []; // 2d array of RawImage objects
 
   constructor(rawGrid) {
     const gridData = ImageGrid.parseGridData(rawGrid);
@@ -20,6 +20,14 @@ export class ImageGrid {
     this.gridHeight = gridData.gridHeight;
     this.tileWidth = gridData.tileWidth;
     this.tileHeight = gridData.tileHeight;
+
+    for (let i = 0; i < this.rows; i++) {
+      this.rawImages[i] = [];
+      for (let j = 0; j < this.columns; j++) {
+        this.rawImages[i][j] = null;
+      }
+    }
+
   }
 
   /**
@@ -91,6 +99,14 @@ export class ImageGrid {
   addImage(image) {
     RawImage.must_be(image);
     this.rawImages.push(image);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        if (this.rawImages[i][j] == null) {
+          this.rawImages[i][j] = image;
+          return;
+        }
+      }
+    }
   }
 }
 

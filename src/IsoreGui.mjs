@@ -208,10 +208,26 @@ export const Gui = {
     container.style.display = 'block';
   },
 
-  displayImageGrid(imageGrid, container) {
-    ImageGrid.must_be(imageGrid);
-    Utility.must_be(container, HTMLElement);
+  displayImageGrid(imageGrid, canvas) {
+    Utility.must_be(imageGrid, ImageGrid);
+    Utility.must_be(canvas, HTMLElement);
+    if (canvas.tagName != 'CANVAS') {
+      throw Error('container must be a canvas');
+    }
 
+    canvas.width = imageGrid.gridWidth;
+    canvas.height = imageGrid.gridHeight;    
+
+    for (let row = 0; row < imageGrid.rows; row++) {
+      for (let col = 0; col < imageGrid.columns; col++) {
+        const rawImage = imageGrid.rawImages[row][col];
+        const dx = col * imageGrid.tileWidth;
+        const dy = row * imageGrid.tileHeight;
+        RawImage.displayOnCanvas(rawImage, canvas, dx, dy);
+      }
+    }
+
+    console.log('imageGrid:', imageGrid);
     console.log('WIP: displayImageGrid()');
 
   },

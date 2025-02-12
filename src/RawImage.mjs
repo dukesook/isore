@@ -48,8 +48,8 @@ export class RawImage {
   
     // Get canvas context
     const ctx = canvas.getContext('2d');
-    canvas.width = width;
-    canvas.height = height;
+    // canvas.width = width;  // DO NOT SET DIMENSIONS HERE!!
+    // canvas.height = height;// This prevents displaying a tile.
   
     // Create an ImageData object
     const imageData = ctx.createImageData(width, height);

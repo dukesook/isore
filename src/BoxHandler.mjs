@@ -78,8 +78,10 @@ export default class BoxHandler {
     const iinf = box.parent;
     const meta = iinf.parent;
     for (const id of to_ids) {
-      box = BoxHandler.getItemById(meta, id);
-    }    
+      const tile = BoxHandler.getItemById(meta, id);
+      const rawImage = BoxHandler.getItemData(isoFile, tile);
+      imageGrid.addImage(rawImage);
+    }
 
     return imageGrid;
   }

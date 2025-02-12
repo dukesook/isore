@@ -249,6 +249,19 @@ export const Gui = {
     container.appendChild(table);
 
     Object.entries(box).forEach(([key, value]) => {
+
+      const nodisplayKeys = [
+        'parent', 'children', 'raw', 'hdr_size',
+        'start'];
+      if (nodisplayKeys.includes(key)) {
+        return;
+      }
+
+      const displayIfExists = ['data', 'uuid', 'item_ID']
+      if (displayIfExists.includes(key) && !value) {
+        return;
+      }
+
       const row = document.createElement('tr');
       const keyCell = document.createElement('td');
       keyCell.textContent = key;
@@ -314,20 +327,6 @@ export const Gui = {
     }
   },
 
-  makeTreeExpandable() {
-    // TODO: Combine with addBoxToTree() - when you add a single box, then make it expandable
-    // Add event listeners to all toggle elements
-    document.querySelectorAll('.tree .toggle').forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const childUl = toggle.nextElementSibling; // Find the sibling <ul>
-        if (childUl) {
-          childUl.classList.toggle('hidden'); // Show/hide child nodes
-          toggle.classList.toggle('expanded'); // Toggle the arrow direction
-        }
-      });
-    });
-  },
-
 
   displayBoxTree(isoFile, tree, onclickBox) {
     Utility.must_be(isoFile, IsoFile);
@@ -347,9 +346,25 @@ export const Gui = {
     })
 
     // TODO: Combine with addBoxToTree()
-    Gui.makeTreeExpandable();
+    makeTreeExpandable();
   },
 
 }
 
 export default Gui;
+
+// Private Functions
+
+function makeTreeExpandable() {
+  // TODO: Combine with addBoxToTree() - when you add a single box, then make it expandable
+  // Add event listeners to all toggle elements
+  document.querySelectorAll('.tree .toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const childUl = toggle.nextElementSibling; // Find the sibling <ul>
+      if (childUl) {
+        childUl.classList.toggle('hidden'); // Show/hide child nodes
+        toggle.classList.toggle('expanded'); // Toggle the arrow direction
+      }
+    });
+  });
+}

@@ -4,42 +4,15 @@ import { RawImage } from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
 import Box from './Box.mjs';
 import { printDimensions, exploreLibheif } from './libs/LibHeif.mjs';
+import Utility from './Utility.mjs';
 
-/**
- * This class is a wrapper around the MP4Box output.
- *
- * @property meta Example:
- * meta = {
- *   boxes: [Array of boxes],
- *   idat,
- *   iinf,
- *   iloc,
- *   iprp,
- *   iref,
- *   pitm
- * }
- *
- * @property items Example:
- * items = [Array of items]
- * item = {
- *  item_ID,
- *  item_type,  (grid, unci, mime, uri, etc)
- *  item_name
- * }
- *
- */
 export class IsoFile {
   raw = null; // ArrayBuffer of the entire ISO file.
   boxes = null; // Array of Boxes
 
-  /**
-   * Constructor
-   * @param {ArrayBuffer} rawIn
-   */
   constructor(rawIn) {
-    if (!(rawIn instanceof ArrayBuffer)) {
-      throw new Error('IsoFile expects an ArrayBuffer but received ' + typeof rawIn + ' instead.');
-    }
+    Utility.must_be(rawIn, ArrayBuffer);
+
     this.raw = rawIn;
     this.boxes = Parser.parseIsoFile(rawIn);
     this.debugLibheif(rawIn);
@@ -50,36 +23,6 @@ export class IsoFile {
     // printDimensions(arrayBufer);
   }
 
-  /**
-   * Computes the offset and length for an infe item
-   */
-  getOffsetAndLength(id, meta) {
-    let offset = 0;
-    const iloc = meta.iloc;
-    let infe_loc = iloc.items.find((item) => item.item_ID == id);
-
-    const extents = infe_loc.extents;
-    const extent = extents[0];
-
-    const extentLength = extent.extent_length;
-
-    if (infe_loc.construction_method == 0) {
-      offset = infe_loc.base_offset + extent.extent_offset;
-    }
-    return { offset, length: extentLength };
-  }
-
-  /**
-   *
-   * @param {Number} id
-   * @returns meta.iinf.item_infos[id]
-   */
-  getItem(id) {
-    // SEARCH ACROSS ALL METABOXES
-    throw Error('IsoFile::getItem - Not implemented');
-
-    return this.items.find((item) => item.item_ID == id);
-  }
 
   getBoxData(box) {
     Box.must_be(box);
@@ -129,16 +72,7 @@ export class IsoFile {
     return { width, height };
   }
 
-  /**
-   * @param {RawImage} tile - Contains pixel data
-   */
-  static displayTile(tile, row, col, canvas) {
-    const dx = col * tile.width;
-    const dy = row * tile.height;
-    tile.displayOnCanvas(canvas, dx, dy);
-  }
 }
-
 
 /**
  *  Use the iloc (Items Location Box) to retrieve the item data. Usually in mdat or idat.

@@ -126,9 +126,11 @@ export default class BoxHandler {
     return data;
   }
 
-  static decode(box, isoFile) {
+  static decode(isoFile, box) {
     Box.must_be(box);
-    IsoFile.must_be(isoFile);
+    Utility.must_be(isoFile, IsoFile);
+    const raw = isoFile.getBoxData(box);
+
 
     if (box.fourcc == 'infe') {
       return BoxHandler.decodeItem(box, raw);

@@ -18,7 +18,7 @@ const htmlImageWidth = document.getElementById('image-width');
 const htmlImageHeight = document.getElementById('image-height');
 
 export const Isore = {
-  isofile: null,
+  isoFile: null,
 
   loadLocalFile(file, successCallback, errCallback) {
     const reader = new FileReader();
@@ -41,7 +41,7 @@ export const Isore = {
 
   loadFile(arrayBuffer) {
     // Create IsoFile object
-    Isore.isofile = new IsoFile(arrayBuffer);
+    Isore.isoFile = new IsoFile(arrayBuffer);
   
     // Display Box Tree
     const tree = document.getElementById('box-tree');
@@ -52,7 +52,7 @@ export const Isore = {
     // Create Callback
     const callback = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
   
-    Gui.displayBoxTree(Isore.isofile, tree, callback);
+    Gui.displayBoxTree(Isore.isoFile, tree, callback);
   
   },
 
@@ -62,9 +62,8 @@ export const Isore = {
       Gui.displayBox(box, boxTreeDump);
 
       
-      const data = BoxHandler.decode(box, raw);
+      const data = BoxHandler.decode(Isore.isoFile, box);
       Isore.displayData(data, mdatCanvas);
-      const raw = Isore.isofile.getBoxData(box);
 
 
     }

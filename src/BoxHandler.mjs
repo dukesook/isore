@@ -38,6 +38,11 @@ export default class BoxHandler {
     Utility.must_be(isoFile, IsoFile);
 
     const raw = BoxHandler.getItemRawData(isoFile, box);
+    if (!raw) {
+      console.error('Item has no mdat/idat data? ' + box);
+      return null;
+    }
+
     Utility.must_be(raw, ArrayBuffer);
 
     let decodedItem = null;
@@ -46,7 +51,6 @@ export default class BoxHandler {
     }
     else if (box.item_type == "unci") {
       decodedItem = BoxDecoder.decode_item_unci(box, raw);
-      RawImage.must_be(decodedItem);
     }
     else if (box.item_type == "grid") {
       decodedItem = BoxHandler.decode_grid_item(box, raw);

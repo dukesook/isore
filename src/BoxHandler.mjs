@@ -127,9 +127,7 @@ export default class BoxHandler {
 
   static decode(box, raw) {
     Box.must_be(box);
-    if (!(raw instanceof ArrayBuffer)) {
-      throw Error('Expected raw data to be an ArrayBuffer');
-    }
+    Utility.must_be(raw, ArrayBuffer);
 
     if (box.fourcc == 'infe') {
       return BoxHandler.decodeItem(box, raw);

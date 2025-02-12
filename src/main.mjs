@@ -2,7 +2,7 @@ import IsoFile from './IsoFile.mjs';
 import Gui from './IsoreGui.mjs';
 import RawImage from './RawImage.mjs';
 import ImageSequence from './ImageSequence.mjs';
-import BoxDecoder from './BoxDecoder.mjs';
+import BoxHandler from './BoxHandler.mjs';
 import ImageGrid from './ImageGrid.mjs';
 
 // HTML Elements
@@ -64,7 +64,7 @@ export const Isore = {
       const raw = Isore.isofile.getBoxData(box);
       if (raw) {
         // Decode
-        const data = BoxDecoder.decode(box, raw);
+        const data = BoxHandler.decode(box, raw);
 
         // Display
         if (typeof data === 'string') {

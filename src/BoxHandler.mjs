@@ -4,9 +4,9 @@ import RawImage from './RawImage.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import Utility from './Utility.mjs';
 
-export const BoxDecoder = {
+export default class BoxHandler {
 
-  decode_item_unci(unci, raw) {
+  static decode_item_unci(unci, raw) {
     Box.must_be(unci, 'infe');
     let ispe = null;
     let uncC = null;
@@ -38,9 +38,9 @@ export const BoxDecoder = {
     const pixels = new Uint8Array(raw);
     const rawImage = new RawImage(pixels, width, height);
     return rawImage;
-  },
+  }
 
-  get_item_references(grid) {
+  static get_item_references(grid) {
     Box.must_be(grid, 'infe');
     let references = [];
     const id = grid.item_ID;
@@ -54,11 +54,11 @@ export const BoxDecoder = {
       }
     }
     return references;
-  },
+  }
 
-  extract_grid_dimg(grid) {
+  static extract_grid_dimg(grid) {
     Box.must_be(grid, 'infe');
-    const references = BoxDecoder.get_item_references(grid);
+    const references = BoxHandler.get_item_references(grid);
     let dimg = null;
     for (const reference of references) {
       if (reference.fourcc == 'dimg') {
@@ -72,12 +72,12 @@ export const BoxDecoder = {
       throw Error('Missing dimg reference for item: ' + grid.item_ID);
     }
     return dimg;
-  },
+  }
 
-  decode_grid_item(grid, raw) {
+  static decode_grid_item(grid, raw) {
     Box.must_be(grid, 'infe');
     
-    const dimg = BoxDecoder.extract_grid_dimg(grid);
+    const dimg = BoxHandler.extract_grid_dimg(grid);
     Box.must_be(dimg, 'dimg');
     const imageGrid = new ImageGrid(raw);
 
@@ -90,16 +90,16 @@ export const BoxDecoder = {
 
 
       Box.must_be(item, 'infe');
-      const rawImage = BoxDecoder.decodeItem(item, raw);
+      const rawImage = BoxHandler.decodeItem(item, raw);
       Utility.must_be(rawImage, RawImage);
 
     }
 
 
     return imageGrid;
-  },
+  }
 
-  decodeItem(box, raw) {
+  static decodeItem(box, raw) {
     Box.must_be(box, 'infe');
     if (box.fourcc != 'infe') {
       throw Error('Expected infe box but got: ' + box.fourcc);
@@ -112,27 +112,27 @@ export const BoxDecoder = {
       data = prettyXML;
     }
     else if (box.item_type == "unci") {
-      const rawImage = BoxDecoder.decode_item_unci(box, raw);
+      const rawImage = BoxHandler.decode_item_unci(box, raw);
       data = rawImage;
     }
     else if (box.item_type == "grid") {
-      data = BoxDecoder.decode_grid_item(box, raw);
+      data = BoxHandler.decode_grid_item(box, raw);
     }
     else {
       return "TODO: display item of type: " + box.item_type;
     }
 
     return data;
-  },
+  }
 
-  decode(box, raw) {
+  static decode(box, raw) {
     Box.must_be(box);
     if (!(raw instanceof ArrayBuffer)) {
       throw Error('Expected raw data to be an ArrayBuffer');
     }
 
     if (box.fourcc == 'infe') {
-      return BoxDecoder.decodeItem(box, raw);
+      return BoxHandler.decodeItem(box, raw);
     }
     else if (box.fourcc == 'trak') {
       return raw;
@@ -140,7 +140,5 @@ export const BoxDecoder = {
     else {
       // console.log(box);
     }
-  },
+  }
 }
-
-export default BoxDecoder;

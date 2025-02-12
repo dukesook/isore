@@ -5,9 +5,10 @@ import RawImage from './RawImage.mjs';
 
 export default class BoxDecoder {
 
-  static decode_item_unci(isoFile, unci) {
+  static decode_item_unci(isoFile, unci, raw) {
     Box.must_be(unci, 'infe');
     Utility.must_be(isoFile, IsoFile);
+    Utility.must_be(raw, ArrayBuffer);
 
     let ispe = null;
     let uncC = null;

@@ -8,19 +8,24 @@ import BoxDecoder from './BoxDecoder.mjs';
 
 export default class BoxHandler {
 
+  /**
+   * 
+   * @returns null if box doesn't have mdat/idat data
+   */
   static getBoxData(isoFile, box) {
     Box.must_be(box);
     Utility.must_be(isoFile, IsoFile);
 
     const fourcc = box.fourcc;
+    let boxData = null;
     if (fourcc == 'infe') {
-      boxData = BoxHandler.decodeItem(box, raw);
+      boxData = BoxHandler.decodeItem(isoFile, box);
     }
     else if (fourcc == 'trak') {
       boxData = getTrackData(box, isoFile.raw);
     }
     else {
-      // console.log(box);
+      return null;
     }
 
     return boxData;
@@ -29,7 +34,7 @@ export default class BoxHandler {
 //********************************************************************** */
 
 
-  static decodeItem(box, isoFile) {
+  static decodeItem(isoFile, box) {
     Box.must_be(box, 'infe');
     Utility.must_be(isoFile, IsoFile);
 
@@ -42,7 +47,7 @@ export default class BoxHandler {
       decodedItem = prettyXML;
     }
     else if (box.item_type == "unci") {
-      decodedItem = BoxDecoder.decode_item_unci(isoFile, box);
+      decodedItem = BoxDecoder.decode_item_unci(isoFile, box, raw);
       RawImage.must_be(decodedItem);
     }
     else if (box.item_type == "grid") {

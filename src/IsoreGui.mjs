@@ -252,7 +252,12 @@ export const Gui = {
 
       const nodisplayKeys = [
         'parent', 'children', 'raw', 'hdr_size',
-        'start'];
+        'start', 'tkhd', 'mdia', 'hdlr', 'minf', 'mdhd',
+        'stsd', 'stts', 'stsc', 'stsz', 'stco', 'stss',
+        'sbgps', 'sgpds', 'pitm','idat', 'iloc', 'iinf',
+        'iprp', 'iref', 'ipmas', 'ipco', 'cmpd', 'uncC',
+        'ispe',
+      ];
       if (nodisplayKeys.includes(key)) {
         return;
       }

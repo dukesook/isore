@@ -1,13 +1,15 @@
 import Box from './Box.mjs';
-import IsoFile from './IsoFile.mjs';
 import Utility from './Utility.mjs';
 import RawImage from './RawImage.mjs';
+import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
+
+// SRP: The BoxDecoder only decodes. It doesn't parse or traverse
+// import IsoFile from './IsoFile.mjs';
 
 export default class BoxDecoder {
 
-  static decode_item_unci(isoFile, unci, raw) {
+  static decode_item_unci(unci, raw) {
     Box.must_be(unci, 'infe');
-    Utility.must_be(isoFile, IsoFile);
     Utility.must_be(raw, ArrayBuffer);
 
     let ispe = null;
@@ -42,7 +44,14 @@ export default class BoxDecoder {
     return rawImage;
   }
 
+  static decode_item_mime(box, raw) {
+    Box.must_be(box, 'infe');
+    Utility.must_be(raw, ArrayBuffer);
 
+    const rawString = new TextDecoder().decode(raw);
+    const prettyXML = xmlFormatter(rawString);
+    return prettyXML;
+  }
 
 
 }

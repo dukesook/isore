@@ -1,5 +1,4 @@
 import Box from './Box.mjs';
-import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 import RawImage from './RawImage.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import Utility from './Utility.mjs';
@@ -19,7 +18,7 @@ export default class BoxHandler {
     const fourcc = box.fourcc;
     let boxData = null;
     if (fourcc == 'infe') {
-      boxData = BoxHandler.decodeItem(isoFile, box);
+      boxData = BoxHandler.getItemData(isoFile, box);
     }
     else if (fourcc == 'trak') {
       boxData = getTrackData(box, isoFile.raw);
@@ -34,20 +33,19 @@ export default class BoxHandler {
 //********************************************************************** */
 
 
-  static decodeItem(isoFile, box) {
+  static getItemData(isoFile, box) {
     Box.must_be(box, 'infe');
     Utility.must_be(isoFile, IsoFile);
 
-    const raw = BoxHandler.getItemDataRaw(isoFile, box);
+    const raw = BoxHandler.getItemRawData(isoFile, box);
+    Utility.must_be(raw, ArrayBuffer);
 
     let decodedItem = null;
     if (box.item_type == 'mime') {
-      const rawString = new TextDecoder().decode(raw);
-      const prettyXML = xmlFormatter(rawString);
-      decodedItem = prettyXML;
+      decodedItem = BoxDecoder.decode_item_mime(box, raw);
     }
     else if (box.item_type == "unci") {
-      decodedItem = BoxDecoder.decode_item_unci(isoFile, box, raw);
+      decodedItem = BoxDecoder.decode_item_unci(box, raw);
       RawImage.must_be(decodedItem);
     }
     else if (box.item_type == "grid") {
@@ -67,8 +65,10 @@ export default class BoxHandler {
   }
 
 
-
-  static getItemDataRaw(isoFile, box) {
+/**
+ * @returns { ArrayBuffer } raw mdat/idat data
+ */
+  static getItemRawData(isoFile, box) {
     Utility.must_be(isoFile, IsoFile);
     Box.must_be(box, 'infe');
 
@@ -139,7 +139,7 @@ export default class BoxHandler {
 
 
       Box.must_be(item, 'infe');
-      const rawImage = BoxHandler.decodeItem(item, raw);
+      const rawImage = BoxHandler.getItemData(item, raw);
       Utility.must_be(rawImage, RawImage);
 
     }

@@ -51,11 +51,6 @@ function toBox(mp4box_object, parent = null) {
   let new_box = new Box();
   new_box.parent = parent;
 
-  if (mp4box_object.type == 'iref') {
-    console.log('mp4box_object:', mp4box_object);
-    // return irefToBox(mp4box_object, new_box);
-  }
-
   // Update values when names don't match
   Object.entries(mp4box_object).forEach(([key, value]) => {
     if (key === 'type') {

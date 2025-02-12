@@ -2,6 +2,7 @@ import Box from './Box.mjs';
 import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
 import RawImage from './RawImage.mjs';
 import ImageGrid from './ImageGrid.mjs';
+import Utility from './Utility.mjs';
 
 export const BoxDecoder = {
 
@@ -79,6 +80,21 @@ export const BoxDecoder = {
     const dimg = BoxDecoder.extract_grid_dimg(grid);
     Box.must_be(dimg, 'dimg');
     const imageGrid = new ImageGrid(raw);
+
+    to_ids = dimg.to_item_IDs;
+    const iinf = grid.parent;
+    const meta = iinf.parent;
+    for (const id of to_ids) {
+      const item = null;
+      // TODO: Get item box given an id;
+
+
+      Box.must_be(item, 'infe');
+      const rawImage = BoxDecoder.decodeItem(item, raw);
+      Utility.must_be(rawImage, RawImage);
+
+    }
+
 
     return imageGrid;
   },

@@ -79,7 +79,7 @@ export const Isore = {
           Isore.displayImageSequence(data, mdatCanvas);
         }
         else if (data instanceof ImageGrid) {
-          console.log('ImageGrid:', data);
+          Gui.displayImageGrid(data, mdatCanvas);
         }
         else {
           console.log('Unhandled data type:', data);

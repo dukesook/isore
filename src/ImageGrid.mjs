@@ -1,14 +1,16 @@
+import RawImage from './RawImage.mjs';
 /**
  * @class ImageGrid
  * @classdesc See the HEIF Document (ISO/IEC 23008-12:2017 - Section 6.6.2.3.2)
  */
 export class ImageGrid {
-  rows = 0; // The number of rows in the grid.
-  columns = 0; // The number of columns in the grid
+  rows = 0;     // The number of rows in the grid.
+  columns = 0;  // The number of columns in the grid
   gridWidth = 0;
   gridHeight = 0;
   tileWidth = 0;
   tileHeight = 0;
+  rawImages = [];
 
   constructor(rawGrid) {
     const gridData = ImageGrid.parseGridData(rawGrid);
@@ -84,6 +86,11 @@ export class ImageGrid {
       tileWidth,
       tileHeight,
     };
+  }
+
+  addImage(image) {
+    RawImage.must_be(image);
+    this.rawImages.push(image);
   }
 }
 

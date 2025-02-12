@@ -212,6 +212,8 @@ export const Gui = {
     ImageGrid.must_be(imageGrid);
     Utility.must_be(container, HTMLElement);
 
+    console.log('WIP: displayImageGrid()');
+
   },
 
   /**

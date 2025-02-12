@@ -5,6 +5,7 @@ import ImageSequence from './ImageSequence.mjs';
 import BoxHandler from './BoxHandler.mjs';
 import ImageGrid from './ImageGrid.mjs';
 import Utility from './Utility.mjs';
+import Box from './Box.mjs';
 
 // HTML Elements
 const fileInput = document.getElementById('file-input');
@@ -57,20 +58,26 @@ export const Isore = {
   },
 
   createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
+    Utility.must_be(boxTreeDump, HTMLElement);
+    Utility.must_be(mdatText, HTMLElement);
+    Utility.must_be(mdatCanvas, HTMLCanvasElement);
+
     const boxTreeListener = function (box) {
+      Utility.must_be(box, Box);
+
       // Display Box
       Gui.displayBox(box, boxTreeDump);
 
       
       const data = BoxHandler.decode(Isore.isoFile, box);
-      Isore.displayData(data, mdatCanvas);
+      Isore.displayData(data, mdatCanvas, mdatText);
 
 
     }
     return boxTreeListener;
   },
 
-  displayData(data, container) {
+  displayData(data, container, mdatText) {
     Utility.must_be(container, HTMLElement);
 
     // Display

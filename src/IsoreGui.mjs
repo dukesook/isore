@@ -261,7 +261,6 @@ export const Gui = {
         return;
       }
 
- 
 
       const row = document.createElement('tr');
       const keyCell = document.createElement('td');

@@ -51,10 +51,15 @@ export const Isore = {
     const mdatText = document.getElementById('mdat-text');
   
     // Create Callback
-    const callback = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
+    const onclickBox = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
   
-    Gui.displayBoxTree(Isore.isoFile, tree, callback);
+    Gui.displayBoxTree(Isore.isoFile, tree, onclickBox);
   
+    // Display Default
+    const defaultBox = Isore.getDefaultBox(Isore.isoFile);
+    if (defaultBox) {
+      onclickBox(defaultBox);
+    }
   },
 
   createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
@@ -154,6 +159,30 @@ export const Isore = {
     htmlImageHeight.innerText = image.height;
     Gui.displayRawImage(image, container);
   },
+
+  getDefaultBox(isoFile) {
+    Utility.must_be(isoFile, IsoFile);
+
+    for (let box of isoFile.boxes) {
+      if (box.fourcc === 'moov') {
+        const trak = box.get_child('trak');
+        return trak;
+      }
+      else if (box.fourcc === 'meta') {
+        const pitm = box.get_child('pitm');
+        console.log('pitm: ', pitm);
+        const id = pitm.item_id; console.log('WARNING: pitm mismatch: item_ID vs item_id');
+        const iinf = box.get_child('iinf');
+        const items = iinf.children;
+        for (const item of items) {
+          if (item.item_ID === id) {
+            return item;
+          }
+        }
+      }
+    }
+
+  }
 
 }
 

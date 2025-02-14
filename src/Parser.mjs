@@ -69,9 +69,9 @@ function toBox(mp4box_object, parent = null) {
     else if (key === 'data') {
       new_box.raw = value;
     }
-    else if (fourcc == 'iloc' && key == 'items') {
-      console.log(mp4box_object);
-    }
+    // else if (fourcc == 'iloc' && key == 'items') {
+    //   console.log(mp4box_object);
+    // }
     else if ( key === 'boxes' ||
               key === "item_infos" ||
               key === 'entries' ||

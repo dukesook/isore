@@ -282,7 +282,7 @@ export const Gui = {
   },
 
   displayText(string, container) {
-    Utility.must_be(container, String);
+    Utility.must_be(string, String);
     Utility.must_be(container, HTMLElement);
     container.innerHTML = '';
     container.style.display = 'block';

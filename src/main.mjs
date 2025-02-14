@@ -51,7 +51,7 @@ export const Isore = {
     const mdatText = document.getElementById('mdat-text');
   
     // Create Callback
-    const onclickBox = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
+    const onclickBox = createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
   
     Gui.displayBoxTree(Isore.isoFile, tree, onclickBox);
   
@@ -60,26 +60,6 @@ export const Isore = {
     if (defaultBox) {
       onclickBox(defaultBox);
     }
-  },
-
-  createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
-    Utility.must_be(boxTreeDump, HTMLElement);
-    Utility.must_be(mdatText, HTMLElement);
-    Utility.must_be(mdatCanvas, HTMLCanvasElement);
-
-    const boxTreeListener = function (box) {
-      Utility.must_be(box, Box);
-
-      // Display Box
-      Gui.displayBox(box, boxTreeDump);
-
-      
-      const data = BoxHandler.getBoxData(Isore.isoFile, box);
-      Isore.displayData(data, mdatCanvas, mdatText);
-
-
-    }
-    return boxTreeListener;
   },
 
   displayData(data, container, mdatText) {
@@ -200,3 +180,23 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM fully loaded and parsed');
 
 });
+
+function createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
+  Utility.must_be(boxTreeDump, HTMLElement);
+  Utility.must_be(mdatText, HTMLElement);
+  Utility.must_be(mdatCanvas, HTMLCanvasElement);
+
+  const boxTreeListener = function (box) {
+    Utility.must_be(box, Box);
+
+    // Display Box
+    Gui.displayBox(box, boxTreeDump);
+
+    
+    const data = BoxHandler.getBoxData(Isore.isoFile, box);
+    Isore.displayData(data, mdatCanvas, mdatText);
+
+
+  }
+  return boxTreeListener;
+}

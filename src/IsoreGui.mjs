@@ -301,15 +301,15 @@ export const Gui = {
   addBoxToTree(box, tree, onclickBox) {
     Box.must_be(box);
 
-    const fourcc = box.fourcc
     let children = box.children;
-
-    // if (fourcc == 'iinf') {
-      // children = box.item_infos;
-    // }
+    let displayName = box.fourcc;
+  
+    if (box.fourcc == 'infe') {
+      displayName = box.fourcc + ' - ' + box.item_type;
+    }
   
     const boxElement = document.createElement('li');
-    boxElement.textContent = fourcc;
+    boxElement.textContent = displayName;
     tree.appendChild(boxElement);
 
     // Add Event Listener to li

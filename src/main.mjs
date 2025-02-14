@@ -46,7 +46,7 @@ export const Isore = {
   
     // Display Box Tree
     const tree = document.getElementById('box-tree');
-    const boxTreeDump = document.getElementById('box-tree-dump');
+    const boxTreeDump = document.getElementById('box-dump');
     const mdatCanvas = document.getElementById('mdat-canvas');
     const mdatText = document.getElementById('mdat-text');
   

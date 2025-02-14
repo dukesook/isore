@@ -74,17 +74,24 @@
 
   </div> <!-- Control Bar -->
 
-  <!-- Box Tree -->
-  <div class="box-tree">
-    <div id="box-tree" class="tree">Box Tree</div>
-    <div id="box-tree-dump">Box Tree Dump</div>
-  </div>  <!-- Box Tree -->
+  <!-- Main App -->
+  <div class="flex">
 
-  <!-- mdat Output -->
-  <div id="mdat-output">
-    <canvas id="mdat-canvas" style="border: 1px solid black"></canvas>
-    <pre id="mdat-text" style="display: none">mdat-text</pre>
-  </div> <!-- mdat Output -->
+    <!-- Box Tree -->
+    <div id="box-tree" class="tree scroll">Box Tree</div>
+      
+    <!-- mdat Output -->
+    <div id="mdat-output" class="scroll">
+      <canvas id="mdat-canvas" style="border: 1px solid black"></canvas>
+      <pre id="mdat-text" style="display: none">mdat-text</pre>
+    </div>
+
+    <!-- Box Dump -->
+    <div id="box-dump">Box Dump</div>
+
+
+  </div>  <!-- Main App -->
+
 
 </body>
 

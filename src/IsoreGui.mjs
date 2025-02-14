@@ -6,6 +6,11 @@ import RawImage from './RawImage.mjs';
 import Utility from './Utility.mjs';
 
 export const Gui = {
+
+  reset() {
+
+  },
+
   /**
    * Displays a list of items on the table.
    *

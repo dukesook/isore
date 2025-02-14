@@ -21,6 +21,14 @@ const htmlImageHeight = document.getElementById('image-height');
 export const Isore = {
   isoFile: null,
 
+  reset() {
+    Gui.reset();
+    htmlFrameCount.innerText = 0;
+    htmlFrameNumber.innerText = 0;
+    htmlImageWidth.innerText = 0;
+    htmlImageHeight.innerText = 0;
+  },
+
   loadLocalFile(file, successCallback, errCallback) {
     const reader = new FileReader();
   
@@ -41,6 +49,9 @@ export const Isore = {
   },
 
   loadFile(arrayBuffer) {
+
+    Isore.reset();
+
     // Create IsoFile object
     Isore.isoFile = new IsoFile(arrayBuffer);
   

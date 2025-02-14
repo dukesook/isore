@@ -248,17 +248,11 @@ export const Gui = {
     const table = document.createElement('table');
     container.appendChild(table);
 
-    Object.entries(box).forEach(([key, value]) => {
+    const entries = Object.entries(box);
+    entries.forEach(([key, value]) => {
 
-      const nodisplayKeys = [
-        'parent', 'children', 'raw', 'hdr_size',
-        'start', 'tkhd', 'mdia', 'hdlr', 'minf', 'mdhd',
-        'stsd', 'stts', 'stsc', 'stsz', 'stco', 'stss',
-        'sbgps', 'sgpds', 'pitm','idat', 'iloc', 'iinf',
-        'iprp', 'iref', 'ipmas', 'ipco', 'cmpd', 'uncC',
-        'ispe',
-      ];
-      if (nodisplayKeys.includes(key)) {
+      if (typeof value == 'object') {
+        // You don't know how to display objects
         return;
       }
 
@@ -266,6 +260,8 @@ export const Gui = {
       if (displayIfExists.includes(key) && !value) {
         return;
       }
+
+ 
 
       const row = document.createElement('tr');
       const keyCell = document.createElement('td');
@@ -372,4 +368,12 @@ function makeTreeExpandable() {
       }
     });
   });
+}
+
+function displayIrefItems(iref, container) {
+  Box.must_be(iref, 'iref');
+  Utility.must_be(container, HTMLElement);
+
+
+
 }

@@ -50,6 +50,7 @@ function toBoxArray(mp4boxfile) {
 function toBox(mp4box_object, parent = null) {
   let new_box = new Box();
   new_box.parent = parent;
+  const fourcc = mp4box_object.type;
 
   if (mp4box_object.type == 'idat') {
     // console.log('idat:', mp4box_object);
@@ -67,6 +68,9 @@ function toBox(mp4box_object, parent = null) {
     }
     else if (key === 'data') {
       new_box.raw = value;
+    }
+    else if (fourcc == 'iloc' && key == 'items') {
+      console.log(mp4box_object);
     }
     else if ( key === 'boxes' ||
               key === "item_infos" ||

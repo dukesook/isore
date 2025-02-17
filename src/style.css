@@ -8,11 +8,12 @@ body {
   color: white;
 }
 
-.flex {
+.main-wrapper {
   display: flex;
+  justify-content: space-around;
 }
 
-/**********************Control Bar***********************/
+
 .control-bar {
   display: flex;
   /* justify-content: space-around; */
@@ -33,12 +34,10 @@ body {
 caption {
   font-weight: bold;
 }
-/**********************Control Bar***********************/
 
 
 
 
-/**********************Box Dump***********************/
 table {
   /* background-color: blue; */
   border: 1px solid white;
@@ -47,19 +46,16 @@ table {
 tr, th, td {
   background-color: var(--color-secondary);
 }
-/**********************Box Dump***********************/
 
 
 
 
-/**********************Box Tree***********************/
 .tree {
   min-width: 200px;
   background-color: var(--color-secondary);
 }
 
 
-/**********************Box Tree***********************/
 
 
 
@@ -71,9 +67,7 @@ pre {
 
 
 
-/**********************mdat Output***********************/
 .scroll {
   overflow: auto;
   max-height: 80em;
 }
-/**********************mdat Output***********************/

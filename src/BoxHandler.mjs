@@ -54,6 +54,9 @@ export default class BoxHandler {
     else if (box.item_type == "grid") {
       decodedItem = BoxHandler.getGridItem(isoFile, box, raw);
     }
+    else if (box.item_type == "hvc1") {
+      decodedItem = BoxDecoder.decode_item_hvc1(isoFile.raw, box, raw);
+    }
     else {
       return "TODO: display item of type: " + box.item_type;
     }

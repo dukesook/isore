@@ -207,6 +207,16 @@ export const Gui = {
     }
   },
 
+  displayImageData(imageData, canvas) {
+    Utility.must_be(imageData, ImageData);
+    Utility.must_be(canvas, HTMLCanvasElement);
+    const ctx = canvas.getContext('2d');
+    canvas.width = imageData.width;
+    canvas.height = imageData.height;
+    ctx.putImageData(imageData, 0, 0);
+  },
+
+
   displayImageSequence(imageSequence, container) {
     ImageSequence.must_be(imageSequence);
     Utility.must_be(container, HTMLElement);

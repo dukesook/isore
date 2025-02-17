@@ -93,6 +93,9 @@ export const Isore = {
     else if (data instanceof ImageGrid) {
       Gui.displayImageGrid(data, container);
     }
+    else if (data instanceof ImageData) {
+      Gui.displayImageData(data, container);
+    }
     else {
       console.log('Unhandled data type:', data);
     }

@@ -2,10 +2,11 @@ import Box from './Box.mjs';
 import Utility from './Utility.mjs';
 import RawImage from './RawImage.mjs';
 import xmlFormatter from 'xml-formatter'; // npm install xml-formatter
+import { decodeItem as libheif_decodeItem } from './libs/LibHeif.mjs';
 import ImageGrid from './ImageGrid.mjs';
 
 // SRP: The BoxDecoder only decodes. It doesn't parse or traverse
-// import IsoFile from './IsoFile.mjs';
+// DON'T import IsoFile
 
 export default class BoxDecoder {
 
@@ -54,5 +55,15 @@ export default class BoxDecoder {
     return prettyXML;
   }
 
+  static decode_item_hvc1(entireFile, box, encodecPixels) {
+    Utility.must_be(entireFile, ArrayBuffer);
+    Box.must_be(box, 'infe');
+    Utility.must_be(encodecPixels, ArrayBuffer);
+
+    const imageData = libheif_decodeItem(entireFile, box.item_ID);
+    Utility.must_be(imageData, ImageData);
+
+    return imageData;
+  }
 
 }

@@ -1,5 +1,10 @@
+:root {
+  --color-primary: rgb(0, 0, 0);
+  --color-secondary: rgb(50, 50, 50);
+}
+
 body {
-  background-color:rgb(0, 0, 0);
+  background-color: var(--color-primary);
   color: white;
 }
 
@@ -12,7 +17,7 @@ body {
   display: flex;
   /* justify-content: space-around; */
   align-items: center;
-  background-color: rgb(50, 50, 50);
+  background-color: var(--color-secondary);
   border: 1px solid black;
   min-height: 3em;
 }
@@ -35,11 +40,12 @@ caption {
 
 /**********************Box Dump***********************/
 table {
-  background-color: black;
+  /* background-color: blue; */
+  border: 1px solid white;
 }
 
 tr, th, td {
-  background-color: rgb(50, 50, 50);
+  background-color: var(--color-secondary);
 }
 /**********************Box Dump***********************/
 
@@ -49,7 +55,7 @@ tr, th, td {
 /**********************Box Tree***********************/
 .tree {
   min-width: 200px;
-  background-color: rgb(50, 50, 50);
+  background-color: var(--color-secondary);
 }
 
 
@@ -58,7 +64,7 @@ tr, th, td {
 
 
 pre {
-  background-color: gray;
+  background-color: var(--color-secondary);
   border: 1px solid black;
 }
 
@@ -68,6 +74,6 @@ pre {
 /**********************mdat Output***********************/
 .scroll {
   overflow: auto;
-  max-height: 40em;
+  max-height: 80em;
 }
 /**********************mdat Output***********************/

@@ -17,6 +17,8 @@ const htmlFrameNumber = document.getElementById('current-frame-number');
 const htmlFrameCount = document.getElementById('frame-count');
 const htmlImageWidth = document.getElementById('image-width');
 const htmlImageHeight = document.getElementById('image-height');
+const fitToScreenCheckbox = document.getElementById('fit-to-screen-checkbox');
+
 
 export const Isore = {
   isoFile: null,
@@ -218,3 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+fitToScreenCheckbox.addEventListener('change', (event) => {
+  const isChecked = event.target.checked;
+  console.log('Fit to screen:', isChecked);
+});

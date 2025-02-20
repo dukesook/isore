@@ -75,18 +75,17 @@ export const Isore = {
 
   displayData(data, container, mdatText) {
     Utility.must_be(container, HTMLElement);
+    Utility.must_be(mdatText, HTMLElement);
 
-    // Display
     if (!data) {
       return;
-    }
-    if (typeof data === 'string') {
+    } else if (typeof data === 'string') {
       Gui.displayText(data, mdatText);
       Gui.hideContainer(container);
     } else {
       Gui.hideContainer(mdatText);
     }
-    
+
     if (data instanceof RawImage) {
       Isore.displayRawImage(data, container);
     }

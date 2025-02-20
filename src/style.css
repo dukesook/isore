@@ -10,7 +10,7 @@ body {
 
 .main-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 
@@ -39,18 +39,16 @@ caption {
 
 
 table {
-  /* background-color: blue; */
+  border-collapse: collapse; /* Prevents double borders between cells. */
+}
+
+td {
   border: 1px solid white;
 }
 
-tr, th, td {
-  background-color: var(--color-secondary);
-}
 
-
-
-
-.tree {
+/* The Box Tree & Box Dump are both side menus*/
+.side-menu {
   min-width: 200px;
   background-color: var(--color-secondary);
 }

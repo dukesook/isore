@@ -61,9 +61,8 @@ export const Isore = {
     const mdatCanvas = document.getElementById('mdat-canvas');
     const mdatText = document.getElementById('mdat-text');
   
-    // Create Callback
-    const onclickBox = Isore.createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas);
-  
+    // On Click Box
+    const onclickBox = Isore.createOnClickBoxListener(boxTreeDump, mdatText, mdatCanvas);
     Gui.displayBoxTree(Isore.isoFile, tree, onclickBox);
   
     // Display Default
@@ -180,23 +179,18 @@ export const Isore = {
 
   },
 
-  createBoxTreeListener(boxTreeDump, mdatText, mdatCanvas) {
+  createOnClickBoxListener(boxTreeDump, mdatText, mdatCanvas) {
     Utility.must_be(boxTreeDump, HTMLElement);
     Utility.must_be(mdatText, HTMLElement);
     Utility.must_be(mdatCanvas, HTMLCanvasElement);
   
     const boxTreeListener = function (box) {
       Utility.must_be(box, Box);
-  
-      // Display Box
       Gui.displayBox(box, boxTreeDump);
-  
-      
       const data = BoxHandler.getBoxData(Isore.isoFile, box);
       Isore.displayData(data, mdatCanvas, mdatText);
-  
-  
     }
+
     return boxTreeListener;
   },
 

@@ -70,6 +70,9 @@ export const Gui = {
    * @param {HTMLTableElement} propertiesTable - The HTMLtable element where the items will be displayed.
    */
   displayPropertiesOnTable(properties, propertiesTable) {
+    Utility.must_be(properties, Array);
+    Utility.must_be(propertiesTable, HTMLElement);
+
     propertiesTable.innerHTML = '';
 
     // Add Title
@@ -107,6 +110,9 @@ export const Gui = {
    * @param {HTMLTableElement} locationsTable - The HTMLtable element where the items will be displayed.
    */
   displayItemLocations(locations, locationsTable) {
+    Utility.must_be(locations, Array);
+    Utility.must_be(locationsTable, HTMLElement);
+
     locationsTable.innerHTML = '';
 
     let caption = document.createElement('caption');
@@ -162,6 +168,9 @@ export const Gui = {
    * @param {HTMLTableElement} referencesTable
    */
   displayReferencesOnTable(references, referencesTable) {
+    Utility.must_be(references, Array);
+    Utility.must_be(referencesTable, HTMLElement);
+
     referencesTable.innerHTML = '';
 
     // Add Title
@@ -311,6 +320,8 @@ export const Gui = {
    */
   addBoxToTree(box, tree, onclickBox) {
     Box.must_be(box);
+    Utility.must_be(tree, HTMLElement);
+    Utility.must_be_function(onclickBox);
 
     let children = box.children;
     let displayName = box.fourcc;

@@ -196,15 +196,11 @@ export const Gui = {
 
   displayRawImage(rawImage, container) {
     RawImage.must_be(rawImage);
-    Utility.must_be(container, HTMLElement);
+    Utility.must_be(container, HTMLCanvasElement);
     container.style.display = 'block';
-
-    // if html tag is canvas
-    if (container.tagName === 'CANVAS') {
-      container.width = rawImage.width;
-      container.height = rawImage.height;
-      RawImage.displayOnCanvas(rawImage, container);
-    }
+    container.width = rawImage.width;
+    container.height = rawImage.height;
+    RawImage.displayOnCanvas(rawImage, container);
   },
 
   displayImageData(imageData, canvas) {

@@ -12,6 +12,9 @@ body {
   display: flex;
   justify-content: flex-start;
 }
+.main-wrapper > * {
+  margin-right: 1em;
+}
 
 
 .control-bar {
@@ -51,6 +54,7 @@ td {
 .side-menu {
   min-width: 200px;
   background-color: var(--color-secondary);
+  font-size: 20px;
 }
 
 

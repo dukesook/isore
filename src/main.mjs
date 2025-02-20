@@ -79,13 +79,16 @@ export const Isore = {
     // Display
     if (!data) {
       return;
-    } if (typeof data === 'string') {
+    }
+    if (typeof data === 'string') {
       Gui.displayText(data, mdatText);
       Gui.hideContainer(container);
-    }
-    else if (data instanceof RawImage) {
-      Isore.displayRawImage(data, container);
+    } else {
       Gui.hideContainer(mdatText);
+    }
+    
+    if (data instanceof RawImage) {
+      Isore.displayRawImage(data, container);
     }
     else if (data instanceof ImageSequence) {
       Isore.displayImageSequence(data, container);

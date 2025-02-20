@@ -30,6 +30,10 @@ export const Isore = {
   },
 
   loadLocalFile(file, successCallback, errCallback) {
+    Utility.must_be(file, File);
+    Utility.must_be_function(successCallback);
+    Utility.must_be_function(errCallback);
+
     const reader = new FileReader();
   
     // If success
@@ -49,6 +53,7 @@ export const Isore = {
   },
 
   loadFile(arrayBuffer) {
+    Utility.must_be(arrayBuffer, ArrayBuffer);
 
     Isore.reset();
 
@@ -105,6 +110,7 @@ export const Isore = {
 
   displayImageSequence(sequence, container) {
     ImageSequence.must_be(sequence);
+    Utility.must_be(container, HTMLElement);
   
     const firstImage = sequence.images[0];
     const frameCount = sequence.images.length;
@@ -150,12 +156,14 @@ export const Isore = {
 
   displayRawImage(image, container) {
     RawImage.must_be(image);
+    Utility.must_be(container, HTMLElement);
     htmlImageWidth.innerText = image.width;
     htmlImageHeight.innerText = image.height;
     Gui.displayRawImage(image, container);
   },
 
   getDefaultBox(isoFile) {
+    // Returns the primary item or first track
     Utility.must_be(isoFile, IsoFile);
 
     for (let box of isoFile.boxes) {
@@ -194,7 +202,8 @@ export const Isore = {
     return boxTreeListener;
   },
 
-}
+} // Isore
+
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files[0];
@@ -202,8 +211,6 @@ fileInput.addEventListener('change', (event) => {
     Isore.loadLocalFile(file, Isore.loadFile, console.log);
   }
 });
-
-
 
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -53,6 +53,7 @@ td {
 /* The Box Tree & Box Dump are both side menus*/
 .side-menu {
   min-width: 200px;
+  height: 800px;
   background-color: var(--color-secondary);
   font-size: 20px;
 }

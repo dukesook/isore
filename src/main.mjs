@@ -222,5 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 fitToScreenCheckbox.addEventListener('change', (event) => {
   const isChecked = event.target.checked;
+  // TODO
   console.log('Fit to screen:', isChecked);
 });
